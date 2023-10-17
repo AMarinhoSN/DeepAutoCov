@@ -18,6 +18,5 @@ def load_data(dir_dataset, week_range):
             for file in files:
                 if file.endswith(".csv"):
                     f = open(file, 'r')
-                    # quì eseguiamo i calcoli necessari
                     f.close()
     return pd.concat(df_list), w_list
