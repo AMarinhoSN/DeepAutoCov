@@ -24,16 +24,16 @@ def filter_row_by_column_length_sostitution(ndarray, string_list, col_index, tar
 
 def insert_sequence_as_column(data, dates, sequence):
     """
-    Inserisce la sequenza di aminoacidi come colonna di un ndarray che contiene i metadati,
-    ordinando poi l'ndarray in base alle date (in ordine crescente).
+    It inserts the amino acid sequence as a column of an ndarray that contains the metadata,
+    then sorting the ndarray by dates (in ascending order).
 
     Args:
-        data (ndarray): l'ndarray contenente i metadati.
-        dates (list): la lista delle date corrispondenti a ciascuna riga dell'ndarray.
-        sequence (list): la lista della sequenza di aminoacidi da inserire come colonna.
+        data (ndarray): the ndarray containing the metadata
+        dates (list): the list of dates corresponding to each row in the ndarray.
+        sequence (list): the list of the amino acid sequence to be entered as a column.
 
     Returns:
-        ndarray: l'ndarray ordinato in base alle date, con la sequenza di aminoacidi inserita come colonna.
+        ndarray: the ndarray sorted by dates, with the amino acid sequence inserted as a column.
     """
     # Trasforma le date in oggetti datetime
     date_objs = np.array([datetime.strptime(date, '%Y-%m-%d') for date in dates])
