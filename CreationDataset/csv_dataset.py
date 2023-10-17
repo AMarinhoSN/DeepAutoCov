@@ -9,9 +9,9 @@ def write_csv_dataset(array,l):
     with open('/blue/salemi/share/varcovid/filtered_metadatataset_010223_edit_020523_'+l+'.csv', "w", newline="") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
 
-        # Scrittura della riga d'intestazione con i nomi delle colonne
+        # Writing header row with column names.
         writer.writerow(nomi_colonne)
 
-        # Scrittura delle righe dei dati
+        # Writing data rows
         for riga in array:
             writer.writerow(riga)
