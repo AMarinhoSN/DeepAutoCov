@@ -1,4 +1,4 @@
-# funxione che mi mappa i lineage
+
 def map_lineage_to_finalclass(class_list, non_neutral):
     # -1 -> non-neutral
     # 1 -> neutral
