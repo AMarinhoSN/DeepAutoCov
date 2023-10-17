@@ -10,7 +10,7 @@ def calculate_kmers(sequences, k):
     return kmers
 
 def format_csv(seq,identificativo,kmers_tot,k,week,l):
-    # poi le dovremmo passare lineage,VOC
+
     kmers=[]
     binary=[]
     binary.append(identificativo)
@@ -32,7 +32,7 @@ def format_csv(seq,identificativo,kmers_tot,k,week,l):
     return 'fatto'
 
 
-# # Esempio di utilizzo:
+# # example of use:
 # sequenze_valide = ["MKTITLEVEDEPGSLYEEDKVLLSVAPQDSGPAVGRQLGVRISGKVFKDVNRLVRVVDGKT", "MKLIPTFTVGGPGMGLLSAFAPTSQAKLATDKYHNLFTYTRVLPIGMEYLPPEHVWQTFT", "MKVAHLTPATLPPLPSQTNRVIQYNNYQSAGGPYTLTMFLLSESIYTENGQWQVSDMNPL"]
 # k = 3
 # kmers = calculate_kmers(sequenze_valide, k) #Clcolo tutti i kmer contenuti nel datbase
