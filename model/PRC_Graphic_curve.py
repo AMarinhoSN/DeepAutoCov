@@ -1,27 +1,27 @@
 import matplotlib.pyplot as plt
 
 def calcola_prc(lista_grande,path_alvataggio):
-    # Inizializzazione delle somme per ciascuna delle 40 colonne
+    # initialization of sums for each of the 40 columns
     somme_precision = [0] * 40  # Una lista di 40 zeri
     somme_recall=[0]*40
 
-    # Ciclo attraverso tutte le sottoliste
+    # Cycle through all sublists.
     for sottolista in lista_grande:
-        # Ciclo attraverso tutte le 40 colonne (posizioni)
+        # Cycle through all 40 columns (positions).
         for i in range(40):
-            # Prendo la sotto-sottolista corrispondente alla colonna i
+            # I take the sub-sublist corresponding to column i
             sotto_sottolista = sottolista[i]
 
-            # Sommo il valore corrispondente a "precision" (indice 1) alla somma per la colonna i
+            # I add the value corresponding to "precision" (index 1) to the sum for column i
             somme_precision[i] += sotto_sottolista[1]
             somme_recall[i] += sotto_sottolista[2]
 
-    # Stampa delle somme
+    # Printing sums
     for i, somma in enumerate(somme_precision):
         somme_precision[i] = somme_precision[i]/16
         somme_recall[i] = somme_recall[i]/16
 
-    # Disegnare la curva PRC originale
+    # Design PRC Curve
     plt.figure(1)
     plt.plot(somme_recall, somme_precision, '-', label='Autoencoder')
     plt.xlabel('Recall')
