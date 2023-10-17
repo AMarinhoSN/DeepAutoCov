@@ -1,4 +1,4 @@
-# funzione che mi dice i lineage della classe
+
 def get_lineage_class(metadata, id_list):
     variant_name_list = []
     for id in id_list:
