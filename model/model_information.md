@@ -7,7 +7,8 @@ The main file is "Main_prediction_AE" where the simulation is implemented and th
 5) PRC_curve.py: function to calculate the PRC_curve
 6) fraction_mail.py: function to calculate the precision in the top100 during the week
 7) falsepositive.py: function to calculate the falsepositive rate and others parameters
-8) barplot_laboratory: barplot to calculate precision on top100
-9) filter_dataset: function to retrain the model during the retraining week
-10) weeks_retraining: we definne the week of retraining
-11) 
+8) barplot_laboratory.py: barplot to calculate precision on top100
+9) filter_dataset.py: function to obtain new dataset to retrain the model during the retraining week
+10) weeks_retraining.py: we definne the week of retraining
+11) scoperta.py: calculte weeks in advance of prediction about the lineages
+12) test_normality_error: calculate the treshold and if errors are distribuated like a Gaussian or not 
