@@ -1,16 +1,16 @@
 import numpy as np
 
 def trova_lineage_per_settimana(dataset, settimana, dizionario_lineage_settimane):
-    # Assumiamo che la colonna dei lineage sia l'ultima
+    # Assume that the lineage column is the last one.
     colonna_lineage = dataset.shape[1] - 1
 
-    # Estraiamo i lineage per la settimana specificata dal dizionario
+    # We extract the lineages for the specified week from the dictionary.
     lineage_settimanali = dizionario_lineage_settimane[settimana]
 
-    # Creiamo un ndarray vuoto per memorizzare i risultati
+    # We create an empty ndarray to store the results.
     risultati = np.empty((0, dataset.shape[1]), dtype=dataset.dtype)
 
-    # Iteriamo attraverso il dataset e selezioniamo solo le righe con i lineage corrispondenti alla settimana specificata
+    # We iterate through the dataset and select only the rows with lineages corresponding to the specified week
     for lineage in lineage_settimanali:
         righe_selezionate = dataset[np.where(dataset[:, colonna_lineage] == lineage)]
         risultati = np.vstack((risultati, righe_selezionate))
@@ -19,18 +19,18 @@ def trova_lineage_per_settimana(dataset, settimana, dizionario_lineage_settimane
 
 
 def trova_indici_lineage_per_settimana(colonna_lineage, settimana, dizionario_lineage_settimane):
-    # Estraiamo i lineage per la settimana specificata dal dizionario
+    # We extract the lineages for the specified week from the dictionary.
     lineage_settimanali = dizionario_lineage_settimane[settimana]
 
-    # Creiamo una lista vuota per memorizzare gli indici delle righe corrispondenti
+    # We create an empty list to store the indexes of the corresponding rows.
     indici_righe = []
 
-    # Iteriamo attraverso la colonna dei lineage e selezioniamo solo gli indici delle righe con i lineage corrispondenti alla settimana specificata
+    # We iterate through the lineage column and select only the row indices with lineages corresponding to the specified week
     for i, lineage in enumerate(colonna_lineage):
         if lineage in lineage_settimanali:
             indici_righe.append(i)
 
-    # Converte gli indici in un ndarray di interi
+    # Converts indexes to an ndarray of integers.
     indici_righe_np = np.array(indici_righe, dtype=int)
 
     return indici_righe_np
