@@ -1,7 +1,7 @@
 def lineages_validi():
     valid_lineage = ['B.1.177', 'B.1', 'B.1.2', 'B.1.1', 'B.1.1.7', 'AY.103', 'AY.44', 'AY.43', 'AY.4', 'B.1.617.2',
                      'BA.2.12.1', 'BA.2', 'BA.1', 'BA.2.9', 'BA.2.3', 'BA.5.1', 'XBB.1.5',
-                     'CH.1.1']  # mettere i lineage che definisco come classe
+                     'CH.1.1']  # FDLs example
     # ---
     valid_lineage_prc = [
         ['B.1.177', 'B.1', 'B.1.2', 'B.1.1', 'B.1.1.7', 'AY.103', 'AY.44', 'AY.43', 'AY.4', 'B.1.617.2', 'BA.2.12.1',
@@ -29,7 +29,7 @@ def lineages_validi():
         ['BA.5.1', 'XBB.1.5', 'CH.1.1'],
         ['XBB.1.5', 'CH.1.1'],
         ['XBB.1.5'],
-        []]
+        []] # lineage that remain like a true class during the week
     dizionario_lineage_settimane = {
         10: ['unknown', 'B.1.1'],
         11: ['unknown', 'B.1', 'B.1.1'],
@@ -56,5 +56,5 @@ def lineages_validi():
               'BA.1', 'BA.2', 'BA.2.9', 'BA.2.3', 'BA.2.12.1', 'BA.5.1', 'CH.1.1'],
         159: ['unknown', 'B.1', 'B.1.1', 'B.1.2', 'B.1.177', 'B.1.1.7', 'AY.4', 'B.1.617.2', 'AY.43', 'AY.44', 'AY.103',
               'BA.1', 'BA.2', 'BA.2.9', 'BA.2.3', 'BA.2.12.1', 'BA.5.1', 'CH.1.1', 'XBB.1.5'],
-    }
+    } # lineages for the retraining
     return valid_lineage,valid_lineage_prc,dizionario_lineage_settimane
