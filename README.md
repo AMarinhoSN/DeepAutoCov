@@ -10,9 +10,15 @@ The main file to create the dataset is "Data_filtration_kmers.py". This code wan
 4. -m length minimum; 
 5. -l range; 
 6. -p path where it’s possible save the file.
+like outputs the code create a drive (call as you have defined example "dataset_interest_2023") where the sequences are stored and the meetadata filtered (In the file csv_dataset.py it's possible decide the name of file filtered) 
 
 To run the code:
-python Data_Filtration_kmers.py -f Spikes_prova.fasta -c pseudodataset.csv -m 1000 -l 30 -p /path/to/save/output
+python Data_Filtration_kmers.py -f Spikes_prova.fasta -c pseudodataset.csv -m 1000 -l 30 -p /path/to/save/dataset_interest_2023
+
+# Model
+The main file to create the dataset is "Data_filtration_kmers.py". This code wants in input : 
+
+
 
 
 
