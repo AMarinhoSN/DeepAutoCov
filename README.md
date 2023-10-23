@@ -28,7 +28,7 @@ The main file to create the dataset is "Main_prediction_AE.py". This code wants 
 9. -r learning rate
 
 To run the code:
-python Main_prediction.py -p /path/to/drive -c /path/to/metadata.csv -k /path/to/kmers_file.csv -s /path/where/to/save/output -m 0.1 -e 300 -b 256 -d 1024 -r 1e-7
+python Main_prediction_AE.py -p /path/to/drive -c /path/to/metadata.csv -k /path/to/kmers_file.csv -s /path/where/to/save/output -m 0.1 -e 300 -b 256 -d 1024 -r 1e-7
 
 
 
