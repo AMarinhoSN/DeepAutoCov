@@ -2,7 +2,7 @@
 Within the <code>model</code> folder you can find the scripts to predict sequences with the Deep Learning model and to perform the simulation. 
 Within the <code>CreationDataset</code> folder you can find the scripts to create the dataset and the feature representations
 
-# Dataset creation
+## Dataset creation
 The file to create the dataset is <code>Data_filtration_kmers.py</code>. These are the script's arguments: 
 1. -f: path where the file fasta is stored (in the "data_github" Drive folder the file is <code>Spikes_prova.fasta</code>); 
 2. -c: path where the file csv is stored (In the "data_github" Drive folder the file is <code>pseudodataset.csv</code>);
@@ -15,7 +15,7 @@ The output is a folder (for example "dataset_interest_2023") where the sequences
 To run the code:
 python Data_Filtration_kmers.py -f Spikes_prova.fasta -c pseudodataset.csv -m 1000 -l 30 -p /path/to/save/dataset_interest_2023
 
-# Model prediction
+## Model prediction
 To predict anomalies, you can use the script <code>Main_prediction_AE.py</code>. The script takes as input : 
 1. -p path where the sequences are located (/path/to/save/dataset_interest_2023/)
 2. -c path where the file filtered csv is storerd (the metadata file filtered created in the "Data_filtration_kmers.py")
