@@ -1,22 +1,22 @@
 # VarAnomaly
-In the folder "model" are contained the script of Deep Learning model and the simulation. 
-In the folder "CreationDataset" are contained the script to create the dataset and feature representations
+Within the <code>model</code> folder you can find the scripts to predict sequences with the Deep Learning model and to perform the simulation. 
+Within the <code>CreationDataset</code> folder you can find the scripts to create the dataset and the feature representations
 
-# Creation dataset
-The main file to create the dataset is "Data_filtration_kmers.py". This code wants in input : 
-1. -f path where the file fasta is stored (In the drive "data_github" the file is Spikes_prova.fasta); 
-2. -c path where the file csv is stored (In the drive "data_github" the file is pseudodataset.csv);
-3. -n nation if not made explicit takes all the data in the csv file;
-4. -m length minimum; 
-5. -l range; 
-6. -p path where it’s possible save the file.
-like outputs the code create a drive (call as you have defined example "dataset_interest_2023") where the sequences are stored (in the csv and text format) and the meetadata filtered (In the file csv_dataset.py it's possible decide the name of file filtered) 
+# Dataset creation
+The main file to create the dataset is <code>Data_filtration_kmers.py</code>. These are the script's arguments: 
+1. -f: path where the file fasta is stored (in the "data_github" Drive folder the file is <code>Spikes_prova.fasta</code>); 
+2. -c: path where the file csv is stored (In the "data_github" Drive folder the file is <code>pseudodataset.csv</code>);
+3. -n: nation (for instance "France") (if not made explicit takes all the data in the csv file);
+4. -m: minimum lenght of the spike sequences; 
+5. -l: median length value that will be used to determine the minum and maximum lenght; 
+6. -p: path where it’s possible save the file.
+The output is a folder (for example "dataset_interest_2023") where the sequences are stored (in the csv and text format) and the metadata of the filtered sequences (In the file csv_dataset.py it's possible decide the name of file filtered) 
 
 To run the code:
 python Data_Filtration_kmers.py -f Spikes_prova.fasta -c pseudodataset.csv -m 1000 -l 30 -p /path/to/save/dataset_interest_2023
 
 # Model
-The main file to create the dataset is "Main_prediction_AE.py". This code wants in input : 
+The main file to create the dataset is <code>Main_prediction_AE.py</code>. The script takes as input : 
 1. -p path where the sequences are located (/path/to/save/dataset_interest_2023/)
 2. -c path where the file filtered csv is storerd (the metadata file filtered created in the "Data_filtration_kmers.py")
 3. -k path where the possible kmers are stored (example is the first line of csv file created in dataset_interest_2023)
