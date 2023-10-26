@@ -511,7 +511,7 @@ if __name__ == "__main__":
                       help="rate for mantain the k-mers", default=0.05)
 
     parser.add_option("-e", "--Epoch ", dest="number_epoch",
-                      help="number of epochs", default=10)
+                      help="number of epochs", default=300)
 
     parser.add_option("-b", "--Batchsize ", dest="batch_size",
                       help="number of batchsize in the first week", default=256)
