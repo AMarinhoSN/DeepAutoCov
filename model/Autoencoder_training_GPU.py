@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-def Autoencoder_training_GPU(autoencoder, train1, train2, nb_epoch, batch_size):
+def autoencoder_training_GPU(autoencoder, train1, train2, nb_epoch, batch_size):
     # Assicurarsi che sia disponibile una GPU
     if tf.config.experimental.list_physical_devices('GPU'):
         # Configurare TensorFlow per utilizzare la GPU
