@@ -139,7 +139,7 @@ def main(options):
         y_test_dict_finalclass = {}
         y_test_dict_predictedclass = {}
         #train = train_step1.copy()
-        history = Autoencoder_training_GPU(autoencoder,train, train,nb_epoch,batch_size)
+        history = autoencoder_training_GPU(autoencoder,train, train,nb_epoch,batch_size)
         print('Ho allenato la rete neurale : ')
         print(history)
         # CALCOLO P-VALUE
@@ -181,7 +181,7 @@ def main(options):
                 with strategy.scope():
                     autoencoder=model(input_dim, encoding_dim, hidden_dim_1, hidden_dim_2, hidden_dim_3, hidden_dim_4, hidden_dim_5,
                           reduction_factor, path_salvataggio_file)
-                history = Autoencoder_training_GPU(autoencoder, train_model_value, train_model_value, nb_epoch, batch_size)
+                history = autoencoder_training_GPU(autoencoder, train_model_value, train_model_value, nb_epoch, batch_size)
 
                 print('Ho allenato la rete neurale : ')
                 print(history)
