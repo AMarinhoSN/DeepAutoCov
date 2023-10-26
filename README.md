@@ -1,6 +1,6 @@
 # VarAnomaly
 Within the <code>model</code> folder you can find the scripts to predict sequences with the Deep Learning model and to perform the simulation. 
-Within the <code>CreationDataset</code> folder you can find the scripts to create the dataset and the feature representations
+Within the <code>Feature_Extraction</code> folder you can find the scripts to create the dataset and the feature representations
 
 ## Dataset creation
 The file to create the dataset is <code>Data_filtration_kmers.py</code>. These are the script's arguments: 
