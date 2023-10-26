@@ -6,6 +6,7 @@ from Calcolo_week import *
 from lineages_validi import *
 from weeks_retraining import *
 from datetime import *
+from Autoencoder_training_GPU import *
 import logging
 from sklearn.model_selection import ParameterGrid
 from sensitivity import *
@@ -51,24 +52,24 @@ def main(options):
     col_submission_date = 'Collection.date'
     col_lineage_id = 'Accession.ID'
 
-    
-    valid_lineage,valid_lineage_prc,dizionario_lineage_settimane=lineages_validi() 
+    # Prima sostituzione perche il replace è utile in casi semplici e non in quelli compessi
+    valid_lineage,valid_lineage_prc,dizionario_lineage_settimane=lineages_validi() # restituisce il lineage valido
 
-    metadata[col_class_lineage] = metadata[col_class_lineage].apply(lambda x: 'unknown' if x not in valid_lineage else x) # I put the unknow in place of the other lineages not considered as of interest
-    id_unknown = metadata[metadata[col_class_lineage] == 'unknown'][col_lineage_id].tolist() # find unknown's id
+    metadata[col_class_lineage] = metadata[col_class_lineage].apply(lambda x: 'unknown' if x not in valid_lineage else x) # metto gli unknow al posto degli altri lineage non considerati come di interersse
+    id_unknown = metadata[metadata[col_class_lineage] == 'unknown'][col_lineage_id].tolist() # trovo gli id degli unknown
 
     # week of retraining
     retraining_week, retraining_week_false_positive=weeks_retrain()
 
     # K-mers
-    header = pd.read_csv(str(options.kmers), nrows=1) # here I have to put the first seventh file with the header
-    features = header.columns[1:].tolist()  # k-mers
+    header = pd.read_csv(str(options.kmers), nrows=1) # qua devo mettere il primo file della prima settimaa con l'header
+    features = header.columns[1:].tolist()  # mi da i k-mers
     print('-----------------------------------------------------------------------------------')
     print('i k-mers in totale sono : ' + str(len(features)))
     print('-----------------------------------------------------------------------------------')
 
     # Saving documents
-    path_salvataggio_file=str(options.path_save) # path where saving the file
+    path_salvataggio_file=str(options.path_save) #mettere il file in cui salviamo i grafici
 
     # lineage og interest
     lineage_of_interest = metadata[col_class_lineage].unique().tolist()
@@ -87,7 +88,7 @@ def main(options):
 
 
     # Training week
-    starting_week = 1 
+    starting_week = 1 # qua posso mettere più valori perchè ne ho solo 17 nella prima settimana e non può andare bene
 
     # Loading first training step
     df_trainstep_1, train_w_list = load_data(dir_week, [starting_week])
@@ -96,25 +97,25 @@ def main(options):
     # define the features mantain
     sum_train = np.sum(train_step1, axis=0)
     keepFeature=sum_train/len(train_step1)
-    i_no_zero = np.where(keepFeature >= options.rate_mantain)[0] # I keep the features that are different by alamneo the N%
+    i_no_zero = np.where(keepFeature >= options.rate_mantain)[0] # tengo le feature che sono diverse di alamneo il N%
 
     print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
-    print('the feature number of the sequences other than zero are :' + str((len(i_no_zero))))
+    print('il numero di feature delle sequenze diverso da zero sono :' + str((len(i_no_zero))))
     print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
 
     y_train_initial = metadata[metadata[col_lineage_id].isin(df_trainstep_1.iloc[:, 0].tolist())][col_class_lineage]
     y_train_class = map_lineage_to_finalclass(y_train_initial.tolist(), lineage_of_interest)
     counter_i = Counter(y_train_initial)  # at the beginning, all the lineages were "unknown"=neutral
 
-    # filtering out features not representive 
+    # filtering out features with all zero
     train_step_completo = train_step1
-    train = train_step1[:, i_no_zero] 
+    train = train_step1[:, i_no_zero] # Per il primo allenamento metto il train
     lineages_train=np.array(y_train_initial.tolist()) # lineages
 
     tf.random.set_seed(10)
     # we Create the Autoencoder models
 
-    # define the parameters
+    # Setto i paramentri dell'autoencoder
     nb_epoch = options.number_epoch
     batch_size = options.batch_size #train_step1.shape[0]
     input_dim =train.shape[1] #num of columns
@@ -138,7 +139,7 @@ def main(options):
         y_test_dict_finalclass = {}
         y_test_dict_predictedclass = {}
         #train = train_step1.copy()
-        history = Autoencoder_training(autoencoder,train, train,nb_epoch,batch_size)
+        history = Autoencoder_training_GPU(autoencoder,train, train,nb_epoch,batch_size)
         print('Ho allenato la rete neurale : ')
         print(history)
         # CALCOLO P-VALUE
@@ -164,12 +165,12 @@ def main(options):
 
                 number_feature = len(i_no_zero)
                 print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
-                print('the feature number of the sequences other than zero are :' + str((len(i_no_zero))))
+                print('il numero di feature in almeno il 5% delle sequenze diverso da zero sono :' + str((len(i_no_zero))))
                 print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
 
                 train_model_value = train_model_value[:, i_no_zero]
 
-                # select the raws of interest
+                # seleziono le righe di interesse
                 index_raw = trova_indici_lineage_per_settimana(classi, week, dizionario_lineage_settimane) # prende in ingresso solo le classi
                 train_model_value=train_model_value[index_raw,:]
                 np.random.shuffle(train_model_value)
@@ -180,9 +181,9 @@ def main(options):
                 with strategy.scope():
                     autoencoder=model(input_dim, encoding_dim, hidden_dim_1, hidden_dim_2, hidden_dim_3, hidden_dim_4, hidden_dim_5,
                           reduction_factor, path_salvataggio_file)
-                history = Autoencoder_training(autoencoder, train_model_value, train_model_value, nb_epoch, batch_size)
+                history = Autoencoder_training_GPU(autoencoder, train_model_value, train_model_value, nb_epoch, batch_size)
 
-                print('trained : ')
+                print('Ho allenato la rete neurale : ')
                 print(history)
 
                 info,mse_tr = test_normality(autoencoder, train_model_value)
@@ -225,14 +226,14 @@ def main(options):
             y_test_i_predict = np.array(y_test_i_predict)
             print(y_test_i_predict)
             i_inlier = np.where(y_test_i_predict == 1)[
-                0]  
+                0]  # qua seleziono solo i predetti inlier cioè quelli che il mio classificiatore predice come inlier
 
             # selection the first 100 with highest mse
             TP_100, FP_100, N_100 = sceltaN(list(mse), y_test_step_i, week, threshold_fixed, 100)
             fractions_100.append([TP_100, FP_100, N_100])
             graphic_fraction(fractions_100, 100, path_salvataggio_file)
 
-            # DATASET OF  TRAINING
+            # COSTRUZIONE TRAINING
             train_step_completo=np.concatenate((train_step_completo, test_step_completo)) # solo 0 e 1
             #train_with_class_completo=np.concatenate((train_with_class_completo, test_with_class_completo))
             lineages_train=np.concatenate((lineages_train, lineages_test)) # solo stringhe
@@ -262,7 +263,7 @@ def main(options):
                 h = len([x for x in y_test_i_predict[i_k] if x == -1])
                 Prova = [k, h, week]
                 beta.append(Prova)
-                measure_variant = [k, len(i_k), h, week]  
+                measure_variant = [k, len(i_k), h, week]  # rappresenta la variante,i casi in quella settimana,
                 measure_sensibilit.append(measure_variant)
                 falsepositive(measure_sensibilit, retraining_week_false_positive, path_salvataggio_file)
 
@@ -496,7 +497,7 @@ if __name__ == "__main__":
 
     parser.add_option("-p", "--pathdrive", dest="path_drive",
 
-                      help="path to drive example: path/drive/", default="/blue/salemi/share/varcovid/dataset_febb_2023_little/")
+                      help="path to drive example: path/drive/", default="/blue/salemi/share/varcovid/dataset_febb_2023_little/")   # default
     parser.add_option("-c", "--csv", dest="csv_path",
 
                       help="path to CSV file metadata", default="/blue/salemi/share/varcovid/filtered_metadatataset_010223_edit_200323.csv")
@@ -511,7 +512,7 @@ if __name__ == "__main__":
                       help="rate for mantain the k-mers", default=0.05)
 
     parser.add_option("-e", "--Epoch ", dest="number_epoch",
-                      help="number of epochs", default=300)
+                      help="number of epochs", default=10)
 
     parser.add_option("-b", "--Batchsize ", dest="batch_size",
                       help="number of batchsize in the first week", default=256)
