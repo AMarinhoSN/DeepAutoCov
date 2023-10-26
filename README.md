@@ -21,9 +21,9 @@ To predict anomalies, you can use the script <code>Main_prediction_AE.py</code>.
 2. -c path where the file filtered csv is storerd (the metadata file filtered created in the "Data_filtration_kmers.py");
 3. -k path where the possible kmers are stored (example is the first line of csv file created in dataset_interest_2023);
 4. -s path to saving the file;
-5. -m fraction of kmers to mantain (<code>default value: 30</code>);
+5. -m fraction of kmers to mantain (<code>default value: 0.05</code>);
 6. -e number of epochs (<code>default value: 300</code>);
-7. -b batch size for the first week (<code>default value: 300</code>);
+7. -b batch size for the first week (<code>default value: 256</code>);
 8. -d Sets the encoding dimension (<code>default value: 1024</code>);
 9. -r learning rate (<code>default value: 1e-7</code>).
 
