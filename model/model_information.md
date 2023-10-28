@@ -12,4 +12,4 @@ In the script <code>Main_prediction_AE</code> the simulation is implemented and 
 10) <code>weeks_retraining.py</code>: we definne the week of retraining;
 11) <code>scoperta.py</code>: calculte weeks in advance of prediction about the lineages;
 12) <code>test_normality_error.py</code>: calculate the treshold and if errors are distribuated like a Gaussian or not;
-13) <code>kmers_errors</code>:Identify erroneous predicted k-mers.  
+13) <code>kmers_errors.py</code>:Identify erroneous predicted k-mers.  
