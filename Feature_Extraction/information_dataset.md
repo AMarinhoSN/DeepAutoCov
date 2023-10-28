@@ -7,4 +7,4 @@ The main script is <code>Data_Filtration_kmers.py</code> where the data is filte
 5) <code>Filtra_lunghezze.py</code>: to filter the length of sequences;
 6) <code>Kmers.py</code>: to calculate the kmers of sequences;
 7) <code>sort_metadata.py</code>: to reorder the sequences;
-8) <code>csv_dataset.py</code>: to transform dataset in csv 
+8) <code>csv_dataset.py</code>: to transform dataset in csv.
