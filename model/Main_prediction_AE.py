@@ -23,6 +23,7 @@ from Autoencoder_training import *
 from PRC_Graphic_curve import *
 from Best_worse import *
 from plot_smooth import *
+from kmers_error import *
 
 
 def main(options):
@@ -199,6 +200,7 @@ def main(options):
             # Loading test step
             df_teststep_i, test_w_list = load_data(dir_week, [starting_week + week])
             test_step_i = df_teststep_i.iloc[:, 1:len(df_teststep_i.columns)].to_numpy() # transform in numpy
+            id_identifier = df_teststep_i.iloc[:, 0].to_list()
             test_step_completo = test_step_i
             test_step_i = test_step_i[:, i_no_zero] # feature selections
             y_test_step_i = get_lineage_class(metadata, df_teststep_i.iloc[:, 0].tolist()) #Mi da gli id list
@@ -224,7 +226,7 @@ def main(options):
             print('la soglia è: ' + str(threshold_fixed))
             y_test_i_predict = [-1 if e >= threshold_fixed else 1 for e in error_df.Reconstruction_error.values]
             y_test_i_predict = np.array(y_test_i_predict)
-            print(y_test_i_predict)
+
             i_inlier = np.where(y_test_i_predict == 1)[
                 0]  # qua seleziono solo i predetti inlier cioè quelli che il mio classificiatore predice come inlier
 
@@ -232,6 +234,10 @@ def main(options):
             TP_100, FP_100, N_100 = sceltaN(list(mse), y_test_step_i, week, threshold_fixed, 100)
             fractions_100.append([TP_100, FP_100, N_100])
             graphic_fraction(fractions_100, 100, path_salvataggio_file)
+
+            # The k-mers importance
+            features_no_zero = [features[i] for i in i_no_zero]
+            selection_kmers(test_x_predictions, test_step_i, features_no_zero, y_test_i_predict, id_identifier,'Summary_'+str(starting_week+week)+'.csv')
 
             # COSTRUZIONE TRAINING
             train_step_completo=np.concatenate((train_step_completo, test_step_completo)) # solo 0 e 1
