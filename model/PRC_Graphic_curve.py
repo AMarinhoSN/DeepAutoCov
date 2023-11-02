@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 # INPUT
 #     1) lists: list that contains precision and recall for each treshold 
 #     2) path_save: path_save_image
+# OUTPUT
+#    1) somme_precision: precision at different threshold 
+#    2) somme_recall: recall at different threshold 
 
 def calcola_prc(lists ,path_save):
     # initialization of sums for each of the 40 columns
