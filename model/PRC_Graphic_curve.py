@@ -1,12 +1,17 @@
 import matplotlib.pyplot as plt
 
-def calcola_prc(lista_grande,path_alvataggio):
+# calcola_prc: calculate the PRC Curve
+# INPUT
+#     1) lists: list that contains precision and recall for each treshold 
+#     2) path_save: path_save_image
+
+def calcola_prc(lists ,path_save):
     # initialization of sums for each of the 40 columns
-    somme_precision = [0] * 40  # Una lista di 40 zeri
+    somme_precision = [0] * 40  
     somme_recall=[0]*40
 
     # Cycle through all sublists.
-    for sottolista in lista_grande:
+    for sottolista in lists:
         # Cycle through all 40 columns (positions).
         for i in range(40):
             # I take the sub-sublist corresponding to column i
@@ -28,9 +33,9 @@ def calcola_prc(lista_grande,path_alvataggio):
     plt.ylabel('Precision')
     plt.title('Precision-Recall Curve')
     plt.legend()
-    plt.savefig(str(path_alvataggio)+'/PRC.jpg', bbox_inches='tight')
+    plt.savefig(str(path_save)+'/PRC.jpg', bbox_inches='tight')
     plt.show()
-    info_graph='Il Grafico è stato stampato'
+    info_graph='done'
 
     return somme_precision,somme_recall,info_graph
 
