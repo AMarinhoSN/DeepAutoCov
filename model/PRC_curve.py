@@ -15,7 +15,7 @@ def compute_confusion_matrix(true_class, mse, threshold):
 
 def evaluate_thresholds(true_classes, mses, init_threshold, min_threshold, max_threshold):
     """
-    Evaluate different thresholds and return cumulative TP, TN, FP, FN
+    Evaluate different thresholds to obtain the 
     """
     step = 0.03 * init_threshold
     TP_TOT, TN_TOT, FP_TOT, FN_TOT = 0, 0, 0, 0
@@ -32,7 +32,15 @@ def evaluate_thresholds(true_classes, mses, init_threshold, min_threshold, max_t
 
 def evaluate_pcr(true_classes, mses, init_threshold, min_threshold, max_threshold):
     """
-    Evaluate different thresholds and return cumulative TP, TN, FP, FN
+    Evaluate different thresholds to obtain the precision and recall. 
+    # INPUT
+    #    1)true_classes: list that contains true class
+    #    2)mses: list that contains mse
+    #    3)init_threshold: treshold for autoencoder
+    #    4)min_threshold: minimum of mse
+    #    5)max_threshold: maximum of mse
+    # OUTPUT
+    #    Soglia_info: list that for each treshold contains the precision and recall
     """
     step = 0.03 * init_threshold
     passi=40
