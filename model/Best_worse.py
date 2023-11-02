@@ -1,5 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+
+# function that has as input:
+#    1) path_salvataggio : path where to save the images
+
 def best_worst(path_salvataggio):
     # The Best
     data = {
