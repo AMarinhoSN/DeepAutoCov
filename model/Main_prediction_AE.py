@@ -34,39 +34,39 @@ def main(options):
 
     # define a list that we will use during the code
     beta = []  # for 100
-    measure_sensibilit = []  # salvo i lineages e tutto
-    NF = []  # sta per number feature per settimana
+    measure_sensibilit = []  
+    NF = []  # Number of features
     results_fine_tune = []
     fractions_100 = []
-    mse_prc_curve = []  # per le probabilità della regressione logistica
-    true_class_prc_curve = []  # contiene la classe vera
-    info_PCR = []  # conterrà tutto le curve create
+    mse_prc_curve = []  
+    true_class_prc_curve = []  
+    info_PCR = []  
     ind_prc = 0
 
-    #dir_week = '/mnt/resources/2022_04/2022_04/dataset_week/'
-    dir_week =str(options.path_drive) #path del Dataset #path del Dataset
-    #metadata = pd.read_csv('/mnt/resources/2022_04/2022_04/filtered_metadata_0328_weeks.csv')
-    metadata = pd.read_csv(str(options.csv_path)) # leggo il file che devo salavare dove creo il dtaaset
+    
+    dir_week =str(options.path_drive) #path Dataset 
+    
+    metadata = pd.read_csv(str(options.csv_path)) # read the file 
 
-    # columns in metadata
+    # columns in metadata file
     col_class_lineage = 'Pango.lineage'
     col_submission_date = 'Collection.date'
     col_lineage_id = 'Accession.ID'
 
-    # Prima sostituzione perche il replace è utile in casi semplici e non in quelli compessi
-    valid_lineage,valid_lineage_prc,dizionario_lineage_settimane=lineages_validi() # restituisce il lineage valido
+    
+    valid_lineage,valid_lineage_prc,dizionario_lineage_settimane=lineages_validi() # return lineages of interest
 
-    metadata[col_class_lineage] = metadata[col_class_lineage].apply(lambda x: 'unknown' if x not in valid_lineage else x) # metto gli unknow al posto degli altri lineage non considerati come di interersse
-    id_unknown = metadata[metadata[col_class_lineage] == 'unknown'][col_lineage_id].tolist() # trovo gli id degli unknown
+    metadata[col_class_lineage] = metadata[col_class_lineage].apply(lambda x: 'unknown' if x not in valid_lineage else x) 
+    id_unknown = metadata[metadata[col_class_lineage] == 'unknown'][col_lineage_id].tolist() 
 
     # week of retraining
     retraining_week, retraining_week_false_positive=weeks_retrain()
 
     # K-mers
-    header = pd.read_csv(str(options.kmers), nrows=1) # qua devo mettere il primo file della prima settimaa con l'header
-    features = header.columns[1:].tolist()  # mi da i k-mers
+    header = pd.read_csv(str(options.kmers), nrows=1) 
+    features = header.columns[1:].tolist()  # k-mers
     print('-----------------------------------------------------------------------------------')
-    print('i k-mers in totale sono : ' + str(len(features)))
+    print('k-mers : ' + str(len(features)))
     print('-----------------------------------------------------------------------------------')
 
     # Saving documents
@@ -89,7 +89,7 @@ def main(options):
 
 
     # Training week
-    starting_week = 1 # qua posso mettere più valori perchè ne ho solo 17 nella prima settimana e non può andare bene
+    starting_week = 1 
 
     # Loading first training step
     df_trainstep_1, train_w_list = load_data(dir_week, [starting_week])
@@ -101,7 +101,7 @@ def main(options):
     i_no_zero = np.where(keepFeature >= options.rate_mantain)[0] # tengo le feature che sono diverse di alamneo il N%
 
     print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
-    print('il numero di feature delle sequenze diverso da zero sono :' + str((len(i_no_zero))))
+    print('features defined :' + str((len(i_no_zero))))
     print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
 
     y_train_initial = metadata[metadata[col_lineage_id].isin(df_trainstep_1.iloc[:, 0].tolist())][col_class_lineage]
@@ -114,9 +114,9 @@ def main(options):
     lineages_train=np.array(y_train_initial.tolist()) # lineages
 
     tf.random.set_seed(10)
-    # we Create the Autoencoder models
+    # Creation the Autoencoder models
 
-    # Setto i paramentri dell'autoencoder
+    # parameters of autoencoder
     nb_epoch = options.number_epoch
     batch_size = options.batch_size #train_step1.shape[0]
     input_dim =train.shape[1] #num of columns
@@ -141,7 +141,7 @@ def main(options):
         y_test_dict_predictedclass = {}
         #train = train_step1.copy()
         history = autoencoder_training_GPU(autoencoder,train, train,nb_epoch,batch_size)
-        print('Ho allenato la rete neurale : ')
+        print('Trained the model : ')
         print(history)
         # CALCOLO P-VALUE
         info, mse_tr = test_normality(autoencoder, train) # we calultae the mse in a normal dataset
@@ -166,12 +166,12 @@ def main(options):
 
                 number_feature = len(i_no_zero)
                 print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
-                print('il numero di feature in almeno il 5% delle sequenze diverso da zero sono :' + str((len(i_no_zero))))
+                print('features defined :' + str((len(i_no_zero))))
                 print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
 
                 train_model_value = train_model_value[:, i_no_zero]
 
-                # seleziono le righe di interesse
+               
                 index_raw = trova_indici_lineage_per_settimana(classi, week, dizionario_lineage_settimane) # prende in ingresso solo le classi
                 train_model_value=train_model_value[index_raw,:]
                 np.random.shuffle(train_model_value)
@@ -184,7 +184,7 @@ def main(options):
                           reduction_factor, path_salvataggio_file)
                 history = autoencoder_training_GPU(autoencoder, train_model_value, train_model_value, nb_epoch, batch_size)
 
-                print('Ho allenato la rete neurale : ')
+                print('Trained the neural network : ')
                 print(history)
 
                 info,mse_tr = test_normality(autoencoder, train_model_value)
@@ -228,7 +228,7 @@ def main(options):
             y_test_i_predict = np.array(y_test_i_predict)
 
             i_inlier = np.where(y_test_i_predict == 1)[
-                0]  # qua seleziono solo i predetti inlier cioè quelli che il mio classificiatore predice come inlier
+                0]  
 
             # selection the first 100 with highest mse
             TP_100, FP_100, N_100 = sceltaN(list(mse), y_test_step_i, week, threshold_fixed, 100)
@@ -240,9 +240,9 @@ def main(options):
             selection_kmers(test_x_predictions, test_step_i, features_no_zero, y_test_i_predict, id_identifier,'Summary_'+str(starting_week+week)+'.csv')
 
             # COSTRUZIONE TRAINING
-            train_step_completo=np.concatenate((train_step_completo, test_step_completo)) # solo 0 e 1
+            train_step_completo=np.concatenate((train_step_completo, test_step_completo)) 
             #train_with_class_completo=np.concatenate((train_with_class_completo, test_with_class_completo))
-            lineages_train=np.concatenate((lineages_train, lineages_test)) # solo stringhe
+            lineages_train=np.concatenate((lineages_train, lineages_test)) 
             y_test_dict_predictedclass[starting_week + week] = y_test_i_predict
             y_test_voc_predict = np.array(y_test_i_predict)[i_voc]
 
@@ -269,7 +269,7 @@ def main(options):
                 h = len([x for x in y_test_i_predict[i_k] if x == -1])
                 Prova = [k, h, week]
                 beta.append(Prova)
-                measure_variant = [k, len(i_k), h, week]  # rappresenta la variante,i casi in quella settimana,
+                measure_variant = [k, len(i_k), h, week]  
                 measure_sensibilit.append(measure_variant)
                 falsepositive(measure_sensibilit, retraining_week_false_positive, path_salvataggio_file)
 
