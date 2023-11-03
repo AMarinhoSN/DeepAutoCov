@@ -4,6 +4,14 @@ import matplotlib
 import pandas as pd
 import seaborn as sns
 
+# graphic_fraction: graphic precision on top 100
+# INPUT
+#    1) AA: list that for each week of simulation [[FP,TP,N],[FP,TP,N]]
+#    2) N: 100
+#    3) path_salvataggio_file:path to save the image
+# OUTPUT
+#    1) image
+
 def graphic_fraction(AA,N,path_salvataggio_file):
     x=[]
 
@@ -50,7 +58,7 @@ def graphic_fraction(AA,N,path_salvataggio_file):
     plt.savefig(path_salvataggio_file + '/Fraction_general' + str(N) + '.png')
 
 
-    k='Salvato'
+    k='Save'
     return k
 
 # k=graphic_fraction(AA_100,100)
