@@ -1,3 +1,4 @@
+# validate_sequences: function to find the correct sequences
 def validate_sequences(sequences):
     valid_sequences = []
     invalid_sequences = []
