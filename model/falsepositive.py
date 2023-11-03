@@ -7,17 +7,14 @@ from plot_confusion_matrix import *
 #from measure_of_variants import *
 
 def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
-    # Nella prima della parte della funzione divido Measure_sensibilit in 5 dataset in base al numero di settimana
-    measure_sensibilit_np = np.array(measure_sensibilit)  # trasformiami un un array
+    
+    measure_sensibilit_np = np.array(measure_sensibilit)  
     Varianti = measure_sensibilit_np[:, 0]
     Casi = np.array(list(map(int, measure_sensibilit_np[:, 1])))
     Predetti = np.array(list(map(int, measure_sensibilit_np[:, 2])))
     Settimane = np.array(list(map(int, measure_sensibilit_np[:, 3])))
     Settimane_giuste = Settimane + 1  # metto le settimane giuste
     variant_dict = Counter(Varianti)
-    # week_individuazione_np = np.array(
-    # [['unknown',1],['Alpha', 27], ['Beta ', 27], ['Gamma', 27], ['Epsil', 35], ['Iota ', 35], ['Zeta ', 35], ['Kappa', 45],
-    # ['Theta', 48], ['Lambd', 49], ['Delta', 51], ['Mu GH', 62], ['Omicr', 75]])
     i = 0
     FP_RATE_FINAL = []
     Final = []
@@ -28,21 +25,21 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
 
     for k in retraining_week:
         i_k = np.where(((Settimane_giuste >= i) & (Settimane_giuste < k)))
-        Variant_in_week_range = Varianti[i_k]  # Varianti nel range di settimane
-        Casi_in_week_range = Casi[i_k]  # Casi nel range di settimane
-        Predetti_in_week_range = Predetti[i_k]  # Predetti nel Range di settimana
-        Settimane_in_week_range = Settimane_giuste[i_k]  # Settimane nel range di settiaman
+        Variant_in_week_range = Varianti[i_k]  
+        Casi_in_week_range = Casi[i_k] 
+        Predetti_in_week_range = Predetti[i_k]  
+        Settimane_in_week_range = Settimane_giuste[i_k]  
         # SETTIMANA DALLA 2 ALLA 10
         if k == 10:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l] 
                     i_anomalie = np.where(
-                        Variant_in_week != 'unknown')  # trovo gli indici delle anomalie nel vettore Variant week nella settimana
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                        Variant_in_week != 'unknown')  
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(Variant_in_week == 'unknown')
                     TN_week = np.sum(Casi_in_week[i_inlier] - Predetti_in_week[i_inlier])
@@ -56,17 +53,17 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
-                break  # Esci dal ciclo se viene generato l'errore "min() arg is an empty sequence"
+                print("The list is empty. Add values to the list.")
+                break  
 
         # SETTIMANA DALLA 10 ALLA 11
         if k == 11:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i) 
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((Variant_in_week == 'B.1') | (
                                                Variant_in_week == 'B.1.177') | (Variant_in_week == 'B.1.1.7') | (
                                                Variant_in_week == 'B.1.2') | (Variant_in_week == 'AY.44') | (
@@ -77,7 +74,7 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                                                    Variant_in_week == 'BA.2.9') | (Variant_in_week == 'BA.2') | (Variant_in_week == 'BA.2.12.1') | (
                                                    Variant_in_week == 'BA.2') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((Variant_in_week == 'unknown') | (Variant_in_week == 'B.1.1')))
                     TN_week = np.sum(Casi_in_week[i_inlier] - Predetti_in_week[i_inlier])
@@ -91,17 +88,17 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
-                break  # Esci dal ciclo se viene generato l'errore "min() arg is an empty sequence"
+                print("The list is empty. Add values to the list.")
+                break  
 
         # DALLA 11 ALLA 44
         if k == 44:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l] 
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((
                             Variant_in_week == 'B.1.177') | (Variant_in_week == 'B.1.1.7') | (
                                                    Variant_in_week == 'B.1.2') | (Variant_in_week == 'AY.44') | (
@@ -113,7 +110,7 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                                                        Variant_in_week == 'BA.2.12.1') | (
                                                    Variant_in_week == 'BA.2') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((Variant_in_week == 'B.1.1') | (Variant_in_week == 'unknown') | (Variant_in_week == 'B.1')))
                     TN_week = np.sum(Casi_in_week[i_inlier] - Predetti_in_week[i_inlier])
@@ -127,16 +124,16 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
-                break  # Esci dal ciclo se viene generato l'errore "min() arg is an empty sequence"
+                print("The list is empty. Add values to the list")
+                break  
         # DALLA 44 ALLA 47
         if k == 47:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((
                                                    Variant_in_week == 'B.1.2') | (Variant_in_week == 'B.1.1.7') | (Variant_in_week == 'AY.44') | (
                                                    Variant_in_week == 'AY.43') | (Variant_in_week == 'AY.4') | (
@@ -147,7 +144,7 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                                                    Variant_in_week == 'BA.2.12.1') | (
                                                    Variant_in_week == 'BA.2') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((
                                                    Variant_in_week == 'B.1.177') | (Variant_in_week == 'B.1.1') | (Variant_in_week == 'unknown') | (Variant_in_week == 'B.1')))
@@ -162,16 +159,16 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # DALLA 47 ALLA 56
         if k == 56:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((Variant_in_week == 'B.1.1.7') | (
                                                        Variant_in_week == 'AY.44') | (
                                                    Variant_in_week == 'AY.43') | (Variant_in_week == 'AY.4') | (
@@ -182,7 +179,7 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                                                    Variant_in_week == 'BA.2.12.1') | (
                                                    Variant_in_week == 'BA.2') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((
                                                    Variant_in_week == 'B.1.177') |(
@@ -199,16 +196,16 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # DALLA 56 ALLA 79
         if k == 79:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l] 
                     i_anomalie = np.where(((
                                                    Variant_in_week == 'AY.44') | (
                                                    Variant_in_week == 'AY.43') | (Variant_in_week == 'AY.4') | (
@@ -219,7 +216,7 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                                                    Variant_in_week == 'BA.2.12.1') | (
                                                    Variant_in_week == 'BA.2') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((Variant_in_week == 'B.1.1.7') | (
                                                  Variant_in_week == 'B.1.177') | (
@@ -236,16 +233,16 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # DALLA 79 ALLA 82
         if k == 82:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l] 
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((
                                                    Variant_in_week == 'AY.44') | (
                                                    Variant_in_week == 'AY.43') | (
@@ -256,7 +253,7 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                                                    Variant_in_week == 'BA.2.12.1') | (
                                                    Variant_in_week == 'BA.2') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((Variant_in_week == 'AY.4') | (Variant_in_week == 'B.1.1.7') | (
                             Variant_in_week == 'B.1.177') | (
@@ -273,16 +270,16 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # Dalla 82 alla 84
         if k == 84:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((Variant_in_week == 'B.1.617.2') |  (
                                                    Variant_in_week == 'AY.43') | (
                                                    Variant_in_week == 'AY.103') | (
@@ -292,7 +289,7 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                                                    Variant_in_week == 'BA.2.12.1') | (
                                                    Variant_in_week == 'BA.2') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((
                                                    Variant_in_week == 'AY.44') | (Variant_in_week == 'AY.4') | (Variant_in_week == 'B.1.1.7') | (
@@ -310,16 +307,16 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list.")
                 break
         # Settimana da 84 a 87
         if k == 87:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((Variant_in_week == 'B.1.617.2') | (
                                                    Variant_in_week == 'AY.43') | (
                                                    Variant_in_week == 'BA.1') | (
@@ -328,7 +325,7 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                                                    Variant_in_week == 'BA.2.12.1') | (
                                                    Variant_in_week == 'BA.2') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((
                                                    Variant_in_week == 'AY.44') | (
@@ -348,17 +345,17 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
 
         #Dalla 87 alla 105
         if k == 105:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l] 
                     i_anomalie = np.where(((
                                                  Variant_in_week == 'AY.43') | (
                                                    Variant_in_week == 'BA.1') | (
@@ -367,7 +364,7 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                                                    Variant_in_week == 'BA.2.12.1') | (
                                                    Variant_in_week == 'BA.2') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((
                                                    Variant_in_week == 'AY.103') | (
@@ -388,23 +385,23 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         #dalla 105 alla 107
         if k == 107:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((Variant_in_week == 'BA.2') | (
                                                  Variant_in_week == 'BA.1') | (
                                                    Variant_in_week == 'BA.2.3') | (
                                                    Variant_in_week == 'BA.2.9') | (
                                                    Variant_in_week == 'BA.2.12.1') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((
                                                  Variant_in_week == 'AY.103') | (
@@ -426,22 +423,22 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # dalla 107 alla 111
         if k == 111:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l] 
                     i_anomalie = np.where(((
                                                  Variant_in_week == 'BA.2.9') |(Variant_in_week == 'BA.2') |(
                                                    Variant_in_week == 'BA.2.3') | (
                                                    Variant_in_week == 'BA.2.12.1') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((
                                                  Variant_in_week == 'BA.1') | (
@@ -464,21 +461,21 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # dalla 111 alla 121
         if k == 121:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((
                                                  Variant_in_week == 'BA.2.3') | (
                                                    Variant_in_week == 'BA.2.12.1') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((
                                                  Variant_in_week == 'BA.2.9') | (Variant_in_week == 'BA.2') | (
@@ -502,20 +499,20 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # da 121 a 126
         if k == 126:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l] 
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((
                                                  Variant_in_week == 'BA.2.12.1') | (Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((
                                                  Variant_in_week == 'BA.2.9') | (
@@ -538,19 +535,19 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # da 126 a 134
         if k == 134:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((Variant_in_week == 'BA.5.1') | (
                                                    Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((
                                                  Variant_in_week == 'BA.2.12.1') | (
@@ -574,18 +571,18 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # dalla 134 a 156
         if k == 156:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((Variant_in_week == 'CH.1.1') | (Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((Variant_in_week == 'BA.5.1') | (
                                                  Variant_in_week == 'BA.2.12.1') | (
@@ -609,18 +606,18 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # DALLA 156 ALLA 159
         if k == 159:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     i_anomalie = np.where(((Variant_in_week == 'XBB.1.5')))
-                    TP_week = np.sum(Predetti_in_week[i_anomalie])  # fare la somma dei veri posistivi nella settimana
+                    TP_week = np.sum(Predetti_in_week[i_anomalie])  
                     FN_week = np.sum(Casi_in_week[i_anomalie] - Predetti_in_week[i_anomalie])
                     i_inlier = np.where(((Variant_in_week == 'CH.1.1') | (Variant_in_week == 'BA.5.1') | (
                                                  Variant_in_week == 'BA.2.12.1') | (
@@ -644,18 +641,18 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
         # dalla 159 alla 160
         if k == 160:
             try:
                 for i in range(min(Settimane_in_week_range), max(Settimane_in_week_range) + 1):
-                    i_l = np.where(Settimane_in_week_range == i)  # indici trovo le settimane
-                    Variant_in_week = Variant_in_week_range[i_l]  # trovo le tipologie in una particolare settimana
-                    Casi_in_week = Casi_in_week_range[i_l]  # trovo i casi in una particolare settimana
-                    Predetti_in_week = Predetti_in_week_range[i_l]  # Trovo i predetti in una settimana
+                    i_l = np.where(Settimane_in_week_range == i)  
+                    Variant_in_week = Variant_in_week_range[i_l]  
+                    Casi_in_week = Casi_in_week_range[i_l]  
+                    Predetti_in_week = Predetti_in_week_range[i_l]  
                     #i_anomalie = np.where(())
-                    TP_week = 0  # fare la somma dei veri posistivi nella settimana
+                    TP_week = 0  
                     FN_week = 0
                     i_inlier = np.where(((Variant_in_week == 'XBB.1.5') | (Variant_in_week == 'CH.1.1') | (Variant_in_week == 'BA.5') | (
                                                  Variant_in_week == 'BA.2.12.1') | (
@@ -679,9 +676,9 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
                 i = k
                 continue
             except ValueError:
-                print("La lista è vuota. Aggiungi dei valori alla lista.")
+                print("The list is empty. Add values to the list")
                 break
-    Settimane_finali = np.unique(Settimane_giuste)  # faccio l'unica
+    Settimane_finali = np.unique(Settimane_giuste)  
     final_df = pd.DataFrame(FP_RATE_FINAL)
     sns.set(style="whitegrid")
     ax = sns.lineplot(data=final_df, color='#fde0dd')
