@@ -33,7 +33,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
         TP = 0
         for i in range(0, n):
             if selection[i, 1] == 'unknown':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
 
@@ -47,7 +47,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
         TP = 0
         for i in range(0, n):
             if selection[i, 1] == 'unknown' or selection[i, 1] == 'B.1.1':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
 
@@ -61,7 +61,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
         TP = 0
         for i in range(0, n):
             if selection[i, 1] == 'unknown' or selection[i, 1] == 'B.1' or selection[i, 1] == 'B.1.1':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
 
@@ -75,7 +75,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
         TP = 0
         for i in range(0, n):
             if selection[i, 1] == 'unknown' or selection[i, 1] == 'B.1' or selection[i, 1] == 'B.1.1' or selection[i, 1] == 'B.1.177':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
 
@@ -89,7 +89,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
         TP = 0
         for i in range(0, n):
             if selection[i, 1] == 'unknown' or selection[i, 1] == 'B.1' or selection[i, 1] == 'B.1.1' or selection[i, 1] == 'B.1.2' or selection[i, 1] == 'B.1.177':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
 
@@ -117,7 +117,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
         TP = 0
         for i in range(0, n):
             if selection[i, 1] == 'unknown' or selection[i, 1] == 'B.1' or selection[i, 1] == 'B.1.1' or selection[i, 1] == 'B.1.2' or selection[i, 1] == 'B.1.177' or selection[i, 1] == 'B.1.1.7' or selection[i, 1] == 'AY.4':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
 
@@ -159,7 +159,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
         TP = 0
         for i in range(0, n):
             if selection[i, 1] == 'unknown' or selection[i, 1] == 'B.1' or selection[i, 1] == 'B.1.1' or selection[i, 1] == 'B.1.2' or selection[i, 1] == 'B.1.177' or selection[i, 1] == 'B.1.1.7' or selection[i, 1] == 'AY.4' or selection[i, 1] == 'B.1.617.2'  or selection[i, 1] == 'AY.44' or selection[i, 1] == 'AY.103':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
     if week >= 105 and week < 107:
@@ -175,7 +175,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 i, 1] == 'B.1.2' or selection[i, 1] == 'B.1.177' or selection[i, 1] == 'B.1.1.7' or selection[
                 i, 1] == 'AY.4' or selection[i, 1] == 'B.1.617.2' or selection[i, 1] == 'AY.43' or selection[
                 i, 1] == 'AY.44' or selection[i, 1] == 'AY.103':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
 
@@ -192,7 +192,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 i, 1] == 'B.1.2' or selection[i, 1] == 'B.1.177' or selection[i, 1] == 'B.1.1.7' or selection[
                 i, 1] == 'AY.4' or selection[i, 1] == 'B.1.617.2' or selection[i, 1] == 'AY.43' or selection[
                 i, 1] == 'AY.44' or selection[i, 1] == 'AY.103' or selection[i, 1] == 'BA.1':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
     if week >= 111 and week < 121:
@@ -226,7 +226,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 i, 1] == 'AY.4' or selection[i, 1] == 'B.1.617.2' or selection[i, 1] == 'AY.43' or selection[
                 i, 1] == 'AY.44' or selection[i, 1] == 'AY.103' or selection[i, 1] == 'BA.1' or selection[
                 i, 1] == 'BA.2' or selection[i, 1] == 'BA.2.9' or selection[i, 1] == 'BA.2.3':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
     if week >= 126 and week < 134:
@@ -244,7 +244,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 i, 1] == 'AY.44' or selection[i, 1] == 'AY.103' or selection[i, 1] == 'BA.1' or selection[
                 i, 1] == 'BA.2' or selection[i, 1] == 'BA.2.9' or selection[i, 1] == 'BA.2.3' or selection[
                 i, 1] == 'BA.2.12.1':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
     if week >= 134 and week < 156:
@@ -262,7 +262,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 i, 1] == 'AY.44' or selection[i, 1] == 'AY.103' or selection[i, 1] == 'BA.1' or selection[
                 i, 1] == 'BA.2' or selection[i, 1] == 'BA.2.9' or selection[i, 1] == 'BA.2.3' or selection[
                 i, 1] == 'BA.2.12.1' or selection[i, 1] == 'BA.5.1' :
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
     if week >= 156 and week < 159:
@@ -280,7 +280,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 i, 1] == 'AY.44' or selection[i, 1] == 'AY.103' or selection[i, 1] == 'BA.1' or selection[
                 i, 1] == 'BA.2' or selection[i, 1] == 'BA.2.9' or selection[i, 1] == 'BA.2.3' or selection[
                 i, 1] == 'BA.2.12.1' or selection[i, 1] == 'BA.5.1' or selection[i, 1] == 'CH.1.1':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1  
             else:
                 TP = TP + 1
     if week >= 159 and week < 160:
@@ -298,7 +298,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 i, 1] == 'AY.44' or selection[i, 1] == 'AY.103' or selection[i, 1] == 'BA.1' or selection[
                 i, 1] == 'BA.2' or selection[i, 1] == 'BA.2.9' or selection[i, 1] == 'BA.2.3' or selection[
                 i, 1] == 'BA.2.12.1' or selection[i, 1] == 'BA.5.1' or selection[i, 1] == 'CH.1.1' or selection[i, 1] == 'XB.1.5':
-                FP = FP + 1  # SE HO MESSO COME
+                FP = FP + 1 
             else:
                 TP = TP + 1
     return FP, TP, n
