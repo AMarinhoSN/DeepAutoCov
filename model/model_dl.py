@@ -1,4 +1,13 @@
 import tensorflow as tf
+# model: function to create the moel
+# INPUT:
+#    1) input_dim: dimension of input 
+#    2) encodin_dim: dimension of encoding
+#    3) hidden_dim: dimension of deep layers
+#    4) reduction_factor
+#    5) path_salvataggio_file: path where to save the model
+# OUTPUT:
+#    1) the model
 def model(input_dim,encoding_dim,hidden_dim_1,hidden_dim_2,hidden_dim_3,hidden_dim_4,hidden_dim_5,reduction_factor,path_salvataggio_file):
     # Input Layer
     input_layer = tf.keras.layers.Input(shape=(input_dim,))
