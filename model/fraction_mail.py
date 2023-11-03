@@ -1,6 +1,17 @@
 import numpy as np
 import pandas as pd
 
+# sceltaN: function to compute the precision of top 100
+# INPUT
+#     1)mse: list of mse 
+#     2)y_test_step_i: lineages in test set
+#     3)week: week of simulation 
+#     4)soglia: threshold 
+#     5)n: 100
+# OUTPUT
+#    1) FP: False Positive
+#    2) TP: True Positive
+#    3) N: number of sequences
 
 def sceltaN(mse, y_test_step_i, week, soglia, n):
     settimana_giusta = week + 1
