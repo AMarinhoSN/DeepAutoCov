@@ -37,20 +37,20 @@ def insert_sequence_as_column(data, dates, sequence):
     Returns:
         ndarray: the ndarray sorted by dates, with the amino acid sequence inserted as a column.
     """
-    # Trasforma le date in oggetti datetime
+    # Transform date in object datetime
     date_objs = np.array([datetime.strptime(date, '%Y-%m-%d') for date in dates])
 
-    # Aggiungi la colonna della sequenza come ultima colonna dell'ndarray
+    # Add the sequence column as the last column of the ndarray
     data_with_sequence = np.column_stack((data, sequence))
 
-    # Aggiungi una colonna con gli oggetti datetime delle date
+    # Add a column with datetime objects of the dates
     data_with_dates = np.column_stack((data_with_sequence, date_objs))
 
-    # Ordina l'ndarray in base alle date
+    # Sort the ndarray by dates
     sorted_indices = np.argsort(data_with_dates[:, -1])
     sorted_data = data_with_dates[sorted_indices]
 
-    # Elimina la colonna delle date
+    # Delete the date column
     sorted_data = np.delete(sorted_data, -1, axis=1)
 
     return sorted_data
