@@ -6,6 +6,8 @@ def filter_row_by_column_length(ndarray, string_list, col_index, target_len):
     mask = np.array([len(s) == target_len for s in ndarray[:,col_index]], dtype=bool)
     return ndarray[mask], [s for s, m in zip(string_list, mask) if m], ndarray[np.logical_not(mask)], [s for s, m in zip(string_list, mask) if not m]
 
+
+# filter_row_by_column_length_sostitution : find the sequences correctly with corrects date 
 def filter_row_by_column_length_sostitution(ndarray, string_list, col_index, target_len):
 
     def check_and_add_suffix(s):
