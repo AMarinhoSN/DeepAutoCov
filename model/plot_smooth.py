@@ -3,11 +3,19 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import seaborn as sns
 import pandas as pd
+# plot_sma: crate a smooth plot.
+# INPUT:
+#    1) vetttore: list
+#    2) window_size: size of window to do a plot
+#    3) path_salvataggio: path to save the file 
+# OUTPUT
+#    1) plot
+
 
 def plot_sma(vettore, window_size,path_salvataggio):
     """
-    Calcola la Simple Moving Average (SMA) di un vettore e ne fa il plot insieme al barplot del vettore stesso.
-    Il parametro window_size indica la dimensione della finestra mobile.
+    Calculates the Simple Moving Average (SMA) of a vector and plots it together with the barplot of the vector itself.
+    The window_size parameter indicates the size of the docker.
     """
     sma = np.convolve(vettore, np.ones(window_size) / window_size, mode='valid')  # Calcolo della SMA
 
