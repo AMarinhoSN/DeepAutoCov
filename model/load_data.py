@@ -1,6 +1,11 @@
 import pandas as pd
 import os
-
+# load_data: function to read the data from the dataset 
+# INPUT:
+#    1)dir_dataset: path of dataset
+#    2)week_range: simulation week
+# OUTPUT:
+#    1)df_list: dataframe that contains the sequences
 
 def load_data(dir_dataset, week_range):
     week_range = [str(x) for x in week_range]
