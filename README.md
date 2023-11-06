@@ -44,9 +44,7 @@ To run the code:
 5) File.h5 which contains the information (weights) of the trained autoencoder;
 6) Graph of the trend of the number of features over time;
 7) Graph of how many weeks in advance ndividing the FDLs with respect to the threshold;
-8) file CSV that contains for each sequence analysed the k-mers not reproduced correctly 
-  1) The first column contain the id_sequence;
-  2) The other columns contain the k-mers;
+8) file CSV that contains for each sequence analysed the k-mers not reproduced correctly (the first column contain the id_sequence and other columns contain the k-mers)
 
 
 
