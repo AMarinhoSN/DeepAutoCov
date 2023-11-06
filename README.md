@@ -55,8 +55,8 @@ Optional
 3) Graph of the precision considering all the sequences considerated anomalies by DeepAutoCov model (<code>precision_overall.png</code>);
 4) Graph F1,Precision,Recall (these graphs are as tests to see how the behaviour of model not considering the fact that the "Anomaly" class varies each time) (<code>precision_in_time.png</code>,<code>recall_in_time.png</code>,<code>f1_in_time</code>); 
 5) File.h5 which contains the information (weights) of the trained AutoEncoder (<code>autoencoder_AERNS.h5</code>);
-6) Graph of the trend of number of features (k-mers) over time (<code>number_of_features.png</code>);
-7) file CSV that contains for each sequence analysed the k-mers not reproduced correctly (the first column contain the id_sequence and other columns contain the k-mers) (<code>summary_kmers_week.csv</code>)
+6) Graph of number of features (k-mers) during simulation (<code>number_of_features.png</code>);
+7) file CSV that contains for each sequence analysed the k-mers not reproduced correctly by DeepAutoCov (The first column contain the id_sequence and other columns contain the k-mers not reproduced correctly) (<code>summary_kmers_week.csv</code>). 
 
 
 
