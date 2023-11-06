@@ -1,4 +1,4 @@
-# VarAnomaly
+# DeepAutoCov
 Within the <code>model</code> folder you can find the scripts to predict sequences with the Deep Learning model and to perform the simulation. 
 Within the <code>Feature_Extraction</code> folder you can find the scripts to create the dataset and the feature representations
 
