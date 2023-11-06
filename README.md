@@ -18,8 +18,11 @@ Mandatory
 
 Optional
 -n: nation (e.g., "France") (if not specified, all sequences are used) (<code>default: ['/']</code>);
+
 -m: Filter: minimum lenght of the spike sequences (<code>default value: 1000</code>); 
+
 -l: Filter: accepted amino acid distant from lineage median (<code>default value: 30</code>); as in: for each lineage, how the protein length can vary to be accepted?
+
 -p: path where it’s possible save the file.
 The output is a folder (for example "dataset_interest_2023") where the sequences are stored (in the csv and text format) and the metadata of the filtered sequences (In the file csv_dataset.py it's possible decide the name of file filtered) 
 
