@@ -1,19 +1,28 @@
 # DeepAutoCov
-Within the <code>model</code> folder you can find the scripts to predict sequences with the Deep Learning model and to perform the simulation. 
-Within the <code>Feature_Extraction</code> folder you can find the scripts to create the dataset and the feature representations
+Code and data to reproduce the simulation in the following publication:
+
+_Forecasting dominance of SARS-CoV-2 lineages by anomaly detection using deep AutoEncoders
+Simone Rancati, Giovanna Nicora, Mattia Prosperi, Riccardo Bellazzi, Simone Marini, Marco Salemi
+bioRxiv 2023.10.24.563721; doi: https://doi.org/10.1101/2023.10.24.563721_
+
+Scripts to predict anomalies, i.e., Future Dominant Lineages (**FDLs**) with the Deep Learning AutoEncoder and to perform the simulation are located in the <code>model</code> folder.
+Scripts to generate the dataset and the feature representations are within the <code>Feature_Extraction</code> folder.
 
 ## Feature Extraction
-The file to create the dataset is <code>Data_filtration_kmers.py</code>. These are the script's arguments: 
-1. -f: path where the file fasta is stored (in the "data_github" Drive folder the file is <code>Spikes_prova.fasta</code>); 
-2. -c: path where the file csv is stored (In the "data_github" Drive folder the file is <code>pseudodataset.csv</code>);
-3. -n: nation (for instance "France") (if not made explicit takes all the data in the csv file) (<code>default: ['/']</code>);
-4. -m: minimum lenght of the spike sequences (<code>default value: 1000</code>); 
-5. -l: median length value that will be used to determine the minum and maximum lenght (<code>default value: 30</code>); 
-6. -p: path where it’s possible save the file.
+The file to create the dataset is <code>Data_filtration_kmers.py</code>. Example:
+<code>python Data_Filtration_kmers.py -f Spikes_prova.fasta -c pseudodataset.csv -m 1000 -l 30 -p /path/to/save/dataset_interest_2023 </code>
+
+Mandatory
+-f: path where the input fasta file is stored (Example file: <code>data_github/Spikes_prova.fasta</code>).
+-c: path where the input metadata (csv) is stored (Example file: <code>data_github/pseudodataset.csv</code>). Sequences and metadata should be in the same order. All columns are necessary and must be in the same order as in the example file, i.e.: <code> Virus name, Last vaccinated, Passage details/history, Type, Accession ID, Collection date, Location, Additional location information, Sequence length, Host, Patient age, Gender, Clade, Pango lineage, Pango version, Variant, AA Substitutions, Submission date, Is reference?, Is complete?, Is high coverage?, Is low coverage?, N-Content, GC-Content</code>
+
+Optional
+-n: nation (e.g., "France") (if not specified, all sequences are used) (<code>default: ['/']</code>);
+-m: Filter: minimum lenght of the spike sequences (<code>default value: 1000</code>); 
+-l: Filter: accepted amino acid distant from lineage median (<code>default value: 30</code>); as in: for each lineage, how the protein length can vary to be accepted?
+-p: path where it’s possible save the file.
 The output is a folder (for example "dataset_interest_2023") where the sequences are stored (in the csv and text format) and the metadata of the filtered sequences (In the file csv_dataset.py it's possible decide the name of file filtered) 
 
-To run the code:
-<code>python Data_Filtration_kmers.py -f Spikes_prova.fasta -c pseudodataset.csv -m 1000 -l 30 -p /path/to/save/dataset_interest_2023 </code>
 
 -Output:
 1) CSV File: Contains the information of the filtered sequences;
