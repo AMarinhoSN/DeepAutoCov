@@ -13,7 +13,12 @@ The file to create the dataset is <code>Data_filtration_kmers.py</code>. These a
 The output is a folder (for example "dataset_interest_2023") where the sequences are stored (in the csv and text format) and the metadata of the filtered sequences (In the file csv_dataset.py it's possible decide the name of file filtered) 
 
 To run the code:
-python Data_Filtration_kmers.py -f Spikes_prova.fasta -c pseudodataset.csv -m 1000 -l 30 -p /path/to/save/dataset_interest_2023
+<code>python Data_Filtration_kmers.py -f Spikes_prova.fasta -c pseudodataset.csv -m 1000 -l 30 -p /path/to/save/dataset_interest_2023 </code>
+Output:
+1) CSV File: Contains the information of the filtered sequences;
+2) Dataset: It creates a folder that in turn contains subfolders (numbered by weeks) that contain:
+  a) file csv for each sequence, in the first raw contains the kmers,in the second contains a sequence of 0/1 that indicates the presence or absence of kmers
+  b) file.txt that contains the identificators and the sequence of 0/1
 
 ## Model prediction
 To predict anomalies, you can use the script <code>Main_prediction_AE.py</code>. The script takes as input : 
@@ -28,7 +33,19 @@ To predict anomalies, you can use the script <code>Main_prediction_AE.py</code>.
 9. -r learning rate (<code>default value: 1e-7</code>).
 
 To run the code:
-python Main_prediction_AE.py -p /path/to/drive -c /path/to/metadata.csv -k /path/to/kmers_file.csv -s /path/where/to/save/output -m 0.1 -e 300 -b 256 -d 1024 -r 1e-7
+<code>python Main_prediction_AE.py -p /path/to/drive -c /path/to/metadata.csv -k /path/to/kmers_file.csv -s /path/where/to/save/output -m 0.1 -e 300 -b 256 -d 1024 -r 1e-7 </code>
+Output:
+1) Precision graph of the top 100 (considering only FDLs) ;
+2) .log file containing for each week how many sequences we consider as anomalous for each FDLs;
+3) Graph of the precision considering all the sequences considerated anomalies;
+4) Graph F1,Precision,Recall ( these graphs are as tests to see how the model was doing not considering the fact that the "Anomaly" class varies each time ); 
+5) File.h5 which contains the information (weights) of the trained autoencoder;
+6) Graph of the trend of the number of features over time;
+7) Graph of how many weeks in advance ndividing the FDLs with respect to the threshold;
+8) file CSV that contains for each sequence analysed the k-mers not reproduced correctly 
+  1) The first column contain the id_sequence;
+  2) The other columns contain the k-mers;
+
 
 
 
