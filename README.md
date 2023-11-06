@@ -37,9 +37,9 @@ To run the code:
 <code>python Main_prediction_AE.py -p /path/to/drive -c /path/to/metadata.csv -k /path/to/kmers_file.csv -s /path/where/to/save/output -m 0.1 -e 300 -b 256 -d 1024 -r 1e-7 </code>
 
 -Output:
-1) Precision graph of the top 100 (considering only FDLs) ;
-2) .log file containing for each week how many sequences we consider as anomalous for each FDLs;
-3) Graph of the precision considering all the sequences considerated anomalies;
+1) Precision-graph of the top 100 sequences considereted like anomalies by DeepAutoCov model (<code>Fraction_general100</code>);
+2) file.log containing for each week of simulation how many sequences the model identified like anomalies for each Future Dominant Lineage or FDL (<code>Autoencode_performance.log</code>);
+3) Graph of the precision considering all the sequences considerated anomalies by DeepAutoCov model;
 4) Graph F1,Precision,Recall ( these graphs are as tests to see how the model was doing not considering the fact that the "Anomaly" class varies each time ); 
 5) File.h5 which contains the information (weights) of the trained autoencoder;
 6) Graph of the trend of the number of features over time;
