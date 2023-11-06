@@ -44,7 +44,7 @@ def model(input_dim,encoding_dim,hidden_dim_1,hidden_dim_2,hidden_dim_3,hidden_d
     autoencoder.summary()
 
     # Define the callbacks for checkpoints and early stopping
-    cp = tf.keras.callbacks.ModelCheckpoint(filepath=path_salvataggio_file + "/autoencoder_fraud_AERNS.h5",
+    cp = tf.keras.callbacks.ModelCheckpoint(filepath=path_salvataggio_file + "/autoencoder_AERNS.h5",
                                             mode='min', monitor='loss', verbose=2, save_best_only=True)
     # define our early stopping
     early_stop = tf.keras.callbacks.EarlyStopping(
