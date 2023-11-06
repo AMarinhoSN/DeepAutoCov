@@ -14,7 +14,8 @@ The output is a folder (for example "dataset_interest_2023") where the sequences
 
 To run the code:
 <code>python Data_Filtration_kmers.py -f Spikes_prova.fasta -c pseudodataset.csv -m 1000 -l 30 -p /path/to/save/dataset_interest_2023 </code>
-Output:
+
+-Output:
 1) CSV File: Contains the information of the filtered sequences;
 2) Dataset: It creates a folder that in turn contains subfolders (numbered by weeks) that contain:
   a) file csv for each sequence, in the first raw contains the kmers,in the second contains a sequence of 0/1 that indicates the presence or absence of kmers
@@ -34,7 +35,8 @@ To predict anomalies, you can use the script <code>Main_prediction_AE.py</code>.
 
 To run the code:
 <code>python Main_prediction_AE.py -p /path/to/drive -c /path/to/metadata.csv -k /path/to/kmers_file.csv -s /path/where/to/save/output -m 0.1 -e 300 -b 256 -d 1024 -r 1e-7 </code>
-Output:
+
+-Output:
 1) Precision graph of the top 100 (considering only FDLs) ;
 2) .log file containing for each week how many sequences we consider as anomalous for each FDLs;
 3) Graph of the precision considering all the sequences considerated anomalies;
