@@ -706,7 +706,7 @@ def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
     plt.ylabel("Precision")
     plt.ylim(0.01, None)  # Imposta l'asse y per iniziare da 0.01
     plt.tight_layout()
-    plt.savefig(path_salvataggio + '/precision_completo.png')
+    plt.savefig(path_salvataggio + '/precision_overall.png')
     # Calcolo matrici di confusione cumulate
     FP_SUM = np.cumsum(FP_FINAL)
     FN_SUM = np.cumsum(FN_FINAL)
