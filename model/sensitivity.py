@@ -78,6 +78,6 @@ def sensitivity(measure_sensibilit,path_salvataggio_file):
         plt.tight_layout()
         plt.savefig(path_salvataggio_file+'sens_in_time_' + k + '.png')
 
-    k = ["Salavti i file",salvataggio]
+    k = ["Save the file",salvataggio]
     return k
 
