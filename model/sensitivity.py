@@ -69,8 +69,8 @@ def sensitivity(measure_sensibilit,path_salvataggio_file):
         for i in range(len(week_pl)):
             plt.annotate(veri[i], (week_pl[i] - 0.4, Sensitivit[i]))
         plt.grid(color='#95a5a6', linestyle='--', linewidth=2, axis='y', alpha=0.7)
-        plt.title('Misure della variante: ' + k)
-        plt.legend(['Sensibilità', 'Specificità', 'Balanced Accuracy'])
+        plt.title('Measure of variants: ' + k)
+        plt.legend(['Sensibility', 'Specificity', 'Balanced Accuracy'])
         plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
         plt.xlabel("Week")
         plt.ylabel("Value")
