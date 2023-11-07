@@ -1,0 +1,11 @@
+Bootstrap: docker
+From: ubuntu:22.04
+
+%post
+apt update
+apt install -y python-is-python3 wget
+
+wget https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+
+pip install panda tensorflow[and-cuda]
