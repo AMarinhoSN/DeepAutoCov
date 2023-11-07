@@ -276,13 +276,13 @@ def main(options):
             with open(path_salvataggio_file+'/TOP_100_FILTERING.txt', 'w') as file:
                 # Scrivi ogni elemento della lista in una nuova riga nel file
                 for elemento in summary_100_anomalies:
-                    file.write(elemento + '\n')
+                    file.write(str(elemento) + '\n')
 
             # Write the file in txt the prediction precision
             with open(path_salvataggio_file + '/TOP_100_FILTERING_PERCENTAGE.txt', 'w') as file:
                 # Scrivi ogni elemento della lista in una nuova riga nel file
                 for elemento in summary_100_anomalies_percentage:
-                    file.write(elemento + '\n')
+                    file.write(str(elemento) + '\n')
 
             # COSTRUZIONE TRAINING
             train_step_completo=np.concatenate((train_step_completo, test_step_completo)) # solo 0 e 1
@@ -357,7 +357,7 @@ def main(options):
     with open(path_salvataggio_file + '/distnce_prediction.txt', 'w') as file:
         # Scrivi ogni elemento della lista in una nuova riga nel file
         for elemento in distanza_lista:
-            file.write(elemento + '\n')
+            file.write(str(elemento) + '\n')
     print('-----------------------------------------Prediction weeks before threshold-------------------------------------------------------')
     print(distanza_np)
     print('---------------------------------------------------------------------------------------------------------------------------')
