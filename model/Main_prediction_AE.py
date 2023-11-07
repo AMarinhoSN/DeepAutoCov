@@ -98,7 +98,7 @@ def main(options):
     # define the features mantain
     sum_train = np.sum(train_step1, axis=0)
     keepFeature=sum_train/len(train_step1)
-    i_no_zero = np.where(keepFeature >= options.rate_mantain)[0] # tengo le feature che sono diverse di alamneo il N%
+    i_no_zero = np.where(keepFeature >= options.rate_mantain)[0] 
 
     print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
     print('features defined :' + str((len(i_no_zero))))
