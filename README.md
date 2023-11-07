@@ -85,8 +85,8 @@ Optional
 4) File txt that contains for each week the percantage of lineages considerated like anomalies (<code>TOP_100_FILTERING_PERCENTAGE.txt</code>)
 7) File.h5 which contains the information (weights) of the trained AutoEncoder (<code>autoencoder_AERNS.h5</code>);
 8) Graph of number of features (k-mers) during simulation (<code>number_of_features.png</code>);
-9) file CSV that contains for each sequence analysed the k-mers not reproduced correctly by DeepAutoCov (The first column contain the id_sequence and other columns contain the k-mers not reproduced correctly) (<code>summary_kmers_week.csv</code>).
-10) File txt that contains the the weeks in advance that the DeepAutoCov identify a FDL as anomaly <code>distance_prediction.txt</code>
+9) file CSV that contains for each sequence analysed the k-mers not reproduced correctly by DeepAutoCov (The first column contain the id_sequence and other columns contain the k-mers not reproduced correctly) (<code>summary_kmers_week.csv</code>);
+10) File txt that contains the the weeks in advance that the DeepAutoCov identify a FDL as anomaly (<code>distance_prediction.txt</code>).
 
 
 
