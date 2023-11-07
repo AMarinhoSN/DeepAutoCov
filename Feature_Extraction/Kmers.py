@@ -9,7 +9,7 @@ def calculate_kmers(sequences, k):
             kmers.append(kmer)
     return kmers
 
-def format_csv(seq,identificativo,kmers_tot,k,week,l):
+def format_csv(seq,identificativo,kmers_tot,k,week,l,path):
 
     kmers=[]
     binary=[]
@@ -25,7 +25,7 @@ def format_csv(seq,identificativo,kmers_tot,k,week,l):
             binary.append(0)
     kmers_tot=[None]+kmers_tot
     #os.makedirs('/Users/utente/Desktop/Varcovid/Nuovi_dati/'+str(week))
-    with open('/blue/salemi/share/varcovid/dataset_febb_2023_'+l+'/'+str(week)+'/'+str(identificativo)+'.csv', 'w', newline='') as file:
+    with open(str(path)+'/'+str(week)+'/'+str(identificativo)+'.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(kmers_tot)
         writer.writerow(binary)
