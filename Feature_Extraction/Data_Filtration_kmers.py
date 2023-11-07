@@ -11,7 +11,6 @@ from data_time import *
 from sort_metadata import *
 import os
 from csv_dataset import *
-
 def main(options):
     #Continent = ['Denmark', 'France', 'United Kingdom', 'USA', '/', 'Denmark']
     continent=options.continent_list
@@ -25,6 +24,7 @@ def main(options):
 
         # I eliminate the ending asterisk in some sequences. In the Fairy format, the asterisk is used to see where the sequence ends.        print("\033[1m Removal of final asterisk from Fasta format \033[0m")
         sequences = [remove_asterisks(s) for s in sequences]
+        print(sequences)
         print("\033[1m Asterisks have been removed  \033[0m")
 
 
@@ -74,15 +74,17 @@ def main(options):
         for sequence in valid_sequences:
             Length_filtering_min_1000_valid.append(len(sequence))
 
+        if not Length_filtering_min_1000_valid:
+            print('There are not the valid sequences in the database. The analysis is stopped')
+            break
 
         print('\033[1m filter the sequences by the length included in the median \033[0m')
-        extreme_inf = st.median(Length_filtering_min_1000_valid) - options.median_limit
-        extreme_sup = st.median(Length_filtering_min_1000_valid) + options.median_limit
+        extreme_inf = st.median(Length_filtering_min_1000_valid) - int(options.med_limit)
+        extreme_sup = st.median(Length_filtering_min_1000_valid) + int(options.med_limit)
         index, valid_sequence = filtra_sequenze(valid_sequences, extreme_inf, extreme_sup)
         metadata_valid_indices_length = metadata_valid_indices[index]
         print(str(len(valid_sequence)) +' sequences with length between ' + str(
             extreme_inf) + ' and ' + str(extreme_sup))
-
 
         print("\033[1m Filter sequences by dates \033[0m")
         metadata_off, sequences_off, metadata_not_off, sequences_not_off = filter_row_by_column_length_sostitution(
@@ -104,7 +106,8 @@ def main(options):
             seq_week.append(len(indices_by_week[i]))
         print(seq_week)
 
-
+        if l=='/':
+            l='all'
         write_csv_dataset(metadata, l)
 
 
@@ -113,23 +116,24 @@ def main(options):
         kmers = calculate_kmers(valid_sequence, k)
         kmers_unici = list(set(kmers))
 
+        import os
         for i in range(0, len(indices_by_week)):
             indices = indices_by_week[i]
             sequences_for_week = []
             identificativo_for_week = []
             week = i + 1
-            os.makedirs(str(options.save_path) + l + '/' + str(week))
+            os.makedirs(str(options.save_path) + '/' + str(week))
             for m, index in enumerate(indices):
                 sequences_for_week.append(sequences[index])
                 identificativo_for_week.append(metadata[index, 4])
             for h, seq in enumerate(sequences_for_week):
-                format_csv(seq, identificativo_for_week[h], kmers_unici, k, week, l)
+                format_csv(seq, identificativo_for_week[h], kmers_unici, k, week, l, str(options.save_path))
 
         # Creating the dataset
         import os
         import csv
 
-        csv_directory = str(options.save_path) + l
+        csv_directory = str(options.save_path)
 
         # Loop attraverso tutte le sottodirectory e file nella cartella principale
         for root, directories, files in os.walk(csv_directory):
@@ -174,4 +178,4 @@ if __name__ == "__main__":
     (options, args) = parser.parse_args()
     main(options)
 
-# python your_script_name.py -f /path/to/spikes.fasta -c /path/to/metadata.csv
+# python3 Data_Filtration_kmers.py -f "Spikes_prova.fasta" -c "pseudodataset.csv" -p "/Users/utente/Desktop/PROVA_GITHUB" -l 30
