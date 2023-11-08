@@ -8,4 +8,4 @@ apt install -y python-is-python3 wget
 wget https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
 
-pip install panda tensorflow[and-cuda]
+pip install pandas tensorflow[and-cuda] scipy matplotlib seaborn numpy scikit-learn
