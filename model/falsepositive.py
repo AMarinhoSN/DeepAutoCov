@@ -4,7 +4,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from plot_confusion_matrix import *
-#from measure_of_variants import *
 
 def falsepositive(measure_sensibilit, retraining_week, path_salvataggio):
     
