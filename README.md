@@ -88,25 +88,55 @@ Optional
 9) file CSV that contains for each sequence analysed the k-mers not reproduced correctly by DeepAutoCov (The first column contain the id_sequence and other columns contain the k-mers not reproduced correctly) (<code>summary_kmers_week.csv</code>);
 10) File txt that contains the weeks in advance that the DeepAutoCov identify a FDL as anomaly (<code>distance_prediction.txt</code>).
 
-## Prediction
-The file to predict the anomalies is <code>predict_new_samples.py</code>. Example:
-<code>python3 predict_new_samples.py -p /path/to/file.fasta -k 3 -s /path/to/save -f /path/to/features.txt -m /path/to/model.h5</code>
-
-Mandatory:
--p path of fasta file (<code>Example:Spikes_prova.fasta</code>);
--k k-mers value (<code>Exemple: k = 3</code>);
--s path where it's possible save the files (<code>/path/to/save</code>);
--f path of model features (<code>/path/to/features.txt</code>);
--m path of model (<code>path/to/model.h5)
-
--Output:
-1) File txt that contains the prediction of DeepAutoCov (<code>prediction_seq.txt</code>);
-2) file CSV that contains for each sequence analysed the k-mers not reproduced correctly by DeepAutoCov (The first column contain the id_sequence and other columns contain the k-mers not reproduced correctly) (<code>summary_kmers_week.csv</code>).
-
-In drive <code>predict</code> are contained the samples files 
+## Prediction on New samples
+Scripts to predict anomalies on new samples given a fasta file are contained in the [predict](predict) folder
+See also correspoding [readme](predict/readme.md) file.
 
 
 
+## Usage
+To predict the anomalies in the fasta file, run the prediction script as follows:
+
+<code>python predict_new_samples.py -p samples_spike.fasta -k 3 -s /path/to/your/output_dir -f features.txt -m Autoencoder_models.h5 </code>
+
+### Arguments
+ <code>-p</code>: input fasta file
+ 
+ <code>-k</code>: kmer length
+ 
+ <code>-f</code>: features list in a txt file (see features.txt file). This file is generated together with the h5 file during training
+ 
+ <code>-m</code>: h5 file containing the autoencoder trained model
+ 
+ <code>-o</code>: output json file path where predictions will be written
+ 
+ 
+ ## Output
+ JSON file containing for each sequence id the following information:
+ - whether the sequence is predicted as anomaly (<code>is_anomaly</code>).
+  If the value is -1, than the sequence is an anomaly
+  - the <code>anomaly_score</code>
+  - <code>misrepresented_kmers</code>: if the sequence is predicted as anomaly,
+   this list contains the misrepresented kmers 
+  ```
+
+  {
+   "EPI_ID1": 
+     {"is_anomaly": 1, 
+      "anomaly_score": 0.021185704234078836}, 
+   "EPI_ID2": 
+     {"is_anomaly": 1, 
+      "anomaly_score": 0.023654659820759667}, 
+   "EPI_ID2": 
+    {"misrepresented_kmers": ["TVY", "NGI", "AQY"], 
+     "is_anomaly": -1, 
+     "anomaly_score": 0.36129919656940856}
+}
+  
+  
+  ```
+ 
+ 
 
 
 
