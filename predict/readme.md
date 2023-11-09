@@ -21,7 +21,7 @@ To activate the conda env:
 ## Usage
 To predict the anomalies in the fasta file, run the prediction script as follows:
 
-<code>python predict_new_samples.py -p samples_spike.fasta -k 3 -s /path/to/your/output_dir -f features.txt -m Autoencoder_models.h5 </code>
+<code>python predict_new_samples.py -p samples_spike.fasta -o /path/to/output/json -f features.txt -m Autoencoder_models.h5 </code>
 
 ### Arguments
  <code>-p</code>: input fasta file
