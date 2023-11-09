@@ -41,7 +41,7 @@ To predict the anomalies in the fasta file, run the prediction script as follows
   If the value is -1, than the sequence is an anomaly
   - the <code>anomaly_score</code>
   - <code>misrepresented_kmers</code>: if the sequence is predicted as anomaly,
-   this list contains the misrepresented kmers 
+    list containing the misrepresented kmers 
   ```
 
   {
