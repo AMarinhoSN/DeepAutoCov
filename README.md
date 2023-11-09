@@ -86,7 +86,25 @@ Optional
 7) File.h5 which contains the information (weights) of the trained AutoEncoder (<code>autoencoder_AERNS.h5</code>);
 8) Graph of number of features (k-mers) during simulation (<code>number_of_features.png</code>);
 9) file CSV that contains for each sequence analysed the k-mers not reproduced correctly by DeepAutoCov (The first column contain the id_sequence and other columns contain the k-mers not reproduced correctly) (<code>summary_kmers_week.csv</code>);
-10) File txt that contains the the weeks in advance that the DeepAutoCov identify a FDL as anomaly (<code>distance_prediction.txt</code>).
+10) File txt that contains the weeks in advance that the DeepAutoCov identify a FDL as anomaly (<code>distance_prediction.txt</code>).
+
+## Prediction
+The file to predict the anomalies is <code>predict_new_samples.py</code>. Example:
+<code>python3 predict_new_samples.py -p /path/to/file.fasta -k 3 -s /path/to/save -f /path/to/features.txt -m /path/to/model.h5</code>
+
+Mandatory:
+-p path of fasta file (<code>Example:Spikes_prova.fasta</code>);
+-k k-mers value (<code>Exemple: k = 3</code>);
+-s path where it's possible save the files (<code>/path/to/save</code>);
+-f path of model features (<code>/path/to/features.txt</code>);
+-m path of model (<code>path/to/model.h5)
+
+-Output:
+1) File txt that contains the prediction of DeepAutoCov (<code>prediction_seq.txt</code>);
+2) file CSV that contains for each sequence analysed the k-mers not reproduced correctly by DeepAutoCov (The first column contain the id_sequence and other columns contain the k-mers not reproduced correctly) (<code>summary_kmers_week.csv</code>).
+
+In drive <code>predict</code> are contained the samples files 
+
 
 
 
