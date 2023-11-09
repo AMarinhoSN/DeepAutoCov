@@ -2,8 +2,8 @@
 
 mydir="path/to/home"
 cd $mydir
-fasta_file="/path/to/Spikes_prova.fasta"
-model="/path/to/Autoencoder_models.h5"
+fasta_file="/path/to/sample.fasta"
+model="/path/to/autoencoder_models.h5"
 feat="/path/to/features.txt"
 
 CONDA_BASE=$(conda info --base)
