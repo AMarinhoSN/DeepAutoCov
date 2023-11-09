@@ -1,5 +1,12 @@
-# Import the function
-from optparse import OptionParser
+# Import builtin python function
+import argparse
+import os
+import csv
+# import external libraries
+import pandas as pd
+
+
+# import functions
 from read_fasta import *
 from read_csv import *
 from save_sequence import *
@@ -7,10 +14,10 @@ from elimina_asterisco import *
 from Filtra_lunghezze import *
 import statistics as st
 from Kmers import *
-from data_time import *
+from data_time import * 
 from sort_metadata import *
-import os
 from csv_dataset import *
+
 def main(options):
     #Continent = ['Denmark', 'France', 'United Kingdom', 'USA', '/', 'Denmark']
     continent=options.continent_list
@@ -130,8 +137,6 @@ def main(options):
                 format_csv(seq, identificativo_for_week[h], kmers_unici, k, week, l, str(options.save_path))
 
         # Creating the dataset
-        import os
-        import csv
 
         csv_directory = str(options.save_path)
 
@@ -154,28 +159,34 @@ def main(options):
 
 
 if __name__ == "__main__":
-    parser = OptionParser()
+    parser = argparse.ArgumentParser(
+        description="Feature extraction script"
+    )
+    requiredNamed = parser.add_argument_group("required named arguments")
+    requiredNamed.add_argument("-f", "--fasta", dest="fasta_path",
+        help="path to a SPIKE FASTA file")
 
-    parser.add_option("-f", "--fasta", dest="fasta_path",
+    requiredNamed.add_argument("-c", "--csv", dest="csv_path",
+        help="path to GISAID metadata CSV file")
 
-                      help="path to FASTA file", default="spikes.fasta")
-    parser.add_option("-c", "--csv", dest="csv_path",
+    parser.add_argument("-n","--continent",dest="continent_list",
+                      help="list of continents of interest [DEFAULT=['/']]", default=['/'])
 
-                      help="path to CSV file", default="metadata.csv")
-    parser.add_option("-n","--continent",dest="continent_list",
-                      help="list of continents of interest",default=['/'])
-
-    parser.add_option("-m", "--minlen ", dest="min_length",
+    parser.add_argument("-m", "--minlen ", dest="min_length",
                       help="minimum length of sequence", default=1000)
 
-    parser.add_option("-l", "--median_limit ", dest="med_limit",
+    parser.add_argument("-l", "--median_limit ", dest="med_limit",
                       help="median range", default=30)
 
-    parser.add_option("-p", "--path_salvataggio_file ", dest="save_path",
-                      help="path where saving the file", default='/blue/salemi/share/varcovid/dataset_febb_2023_')
+    parser.add_argument("-o", "--output_dir", dest="save_path",
+                      help="set ouput dir [DEFAULT=<current working directory>]", default=os.getcwd())
 
 
-    (options, args) = parser.parse_args()
-    main(options)
+    args = parser.parse_args()
+    main(args)
 
 # python3 Data_Filtration_kmers.py -f "Spikes_prova.fasta" -c "pseudodataset.csv" -p "/Users/utente/Desktop/PROVA_GITHUB" -l 30
+
+# TODO: - fix arguments
+# TODO: - add test data
+# TODO: - 

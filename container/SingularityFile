@@ -1,0 +1,18 @@
+Bootstrap: docker
+From: ubuntu:22.04
+
+%post
+apt update
+apt install -y python-is-python3 wget
+
+wget https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+
+pip install pandas tensorflow[and-cuda] scipy matplotlib seaborn numpy scikit-learn
+
+%test
+python -c "import tensorflow"
+python -c "import matplotlib"
+python -c "import seaborn"
+python -c "import numpy"
+python -c "import sklearn"
