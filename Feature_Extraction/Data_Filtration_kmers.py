@@ -2,6 +2,9 @@
 import argparse
 import os
 import csv
+# import external libraries
+import pandas as pd
+
 
 # import functions
 from read_fasta import *
@@ -11,9 +14,10 @@ from elimina_asterisco import *
 from Filtra_lunghezze import *
 import statistics as st
 from Kmers import *
-#from data_time import * # is not call at all and also does not exist
+from data_time import * 
 from sort_metadata import *
 from csv_dataset import *
+
 def main(options):
     #Continent = ['Denmark', 'France', 'United Kingdom', 'USA', '/', 'Denmark']
     continent=options.continent_list
@@ -155,7 +159,12 @@ def main(options):
 
 
 if __name__ == "__main__":
-    parser = OptionParser()
+    parser = argparse.ArgumentParser(
+        description="Feature extraction script"
+    )
+    requiredNamed = parser.add_argument_group("required named arguments")
+    requiredNamed.add_argument("-f", "--fasta", dest="fasta_path",
+        help="path to a SPIKE FASTA file")
 
     requiredNamed.add_argument("-c", "--csv", dest="csv_path",
         help="path to GISAID metadata CSV file")
