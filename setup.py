@@ -15,7 +15,7 @@ setup(name='DeepAutoCov',
     ],
     install_requires=[
         'pandas==2.1.2', 'numpy==1.26.1', 'matplotlib==3.8.1',
-        'scipy==1.11.3', 'seaborn==0.13.0', 'scikit-lean==1.2.2',
+        'scipy==1.11.3', 'seaborn==0.13.0', 'scikit-learn==1.2.2',
         'tensorflow[and-cuda]==2.14.0'],
     scripts=['app/deepautocov'],
     zip_safe=False
