@@ -10,16 +10,6 @@ import random
 import pandas as pd
 import numpy as np
 
-# import functions
-#from read_fasta import *
-#from read_csv import *
-#from save_sequence import *
-#from elimina_asterisco import *
-#from Filtra_lunghezze import *
-#from Kmers import *
-#from data_time import * 
-#from sort_metadata import *
-#from csv_dataset import *
 
 # --- FUNCTIONS --- #
 def read_fasta(file):
@@ -245,7 +235,7 @@ def write_csv_dataset(array,l):
         for riga in array:
             writer.writerow(riga)
 
-def main(options):
+def feature_extractor_main(options):
     #Continent = ['Denmark', 'France', 'United Kingdom', 'USA', '/', 'Denmark']
     continent=options.continent_list
     for l in continent:
@@ -409,7 +399,7 @@ if __name__ == "__main__":
                       help="set ouput dir [DEFAULT=<current working directory>]", default=os.getcwd())
 
     args = parser.parse_args()
-    main(args)
+    feature_extractor_main(args)
 
 # python3 Data_Filtration_kmers.py -f "Spikes_prova.fasta" -c "pseudodataset.csv" -p "/Users/utente/Desktop/PROVA_GITHUB" -l 30
 

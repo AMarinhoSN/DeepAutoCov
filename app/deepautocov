@@ -1,7 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import argparse
 import deepautocov
 import os
+
 parser = argparse.ArgumentParser(
         description="Feature extraction script"
     )
@@ -27,5 +28,4 @@ parser.add_argument("-o", "--output_dir", dest="save_path",
 
 args = parser.parse_args()
 
-
-deepautocov.data_filtration_kmers_rewrite.main(args)
+deepautocov.feature_extractor_main(args)
