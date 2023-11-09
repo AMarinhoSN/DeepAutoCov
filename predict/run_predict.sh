@@ -1,10 +1,10 @@
 #!bin/bash
 
-mydir="/home/bms-bioinfo/simone"
+mydir="path/to/home"
 cd $mydir
-fasta_file="/home/bms-bioinfo/simone/Spikes_prova.fasta"
-model="/home/bms-bioinfo/simone/Autoencoder_models.h5"
-feat="/home/bms-bioinfo/simone/cleaned_list.txt"
+fasta_file="/path/to/Spikes_prova.fasta"
+model="/path/to/Autoencoder_models.h5"
+feat="/path/to/features.txt"
 
 CONDA_BASE=$(conda info --base)
 source $CONDA_BASE/etc/profile.d/conda.sh
