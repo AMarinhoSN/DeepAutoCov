@@ -1,37 +1,434 @@
-from load_data import *
-from get_lineage_class import *
-from map_lineage_to_finalclass import *
-from optparse import OptionParser
-from Calcolo_week import *
-from lineages_validi import *
-from weeks_retraining import *
-from datetime import *
-from Autoencoder_training_GPU import *
-import logging
+import pandas as pd
 from sklearn.model_selection import ParameterGrid
-from sensitivity import *
-from falsepositive import *
-from fraction_mail import *
-from barplot_laboratory import *
-from scoperta import *
-from filter_dataset import *
-from test_normality_error import *
+from optparse import OptionParser
+import numpy as np
+from collections import Counter
+import tensorflow as tf
+import logging
+from scipy.stats import shapiro
 import gc
-from PRC_curve import *
-from model_dl import *
-from Autoencoder_training import *
-from PRC_Graphic_curve import *
-from Best_worse import *
-from plot_smooth import *
-from kmers_error import *
+import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+import seaborn as sns
+from datetime import *
+import os
+#from load_data import *
+#from get_lineage_class import *
+#from map_lineage_to_finalclass import *
+#from Calcolo_week import *
+from .lineages_validi import *
+from .weeks_retraining import *
+
+#from Autoencoder_training_GPU import *
+from .sensitivity import *
+from .falsepositive import *
+from .fraction_mail import *
+from .barplot_laboratory import *
+#from scoperta import *
+#from filter_dataset import *
+#from test_normality_error import *
+from .PRC_curve import *
+#from model_dl import *
+#from Autoencoder_training import *
+#from PRC_Graphic_curve import *
+from .Best_worse import *
+#from plot_smooth import *
+from .kmers_error import *
+
+# --/ load_data
+
+# load_data: function to read the data from the dataset 
+# INPUT:
+#    1)dir_dataset: path of dataset
+#    2)week_range: simulation week
+# OUTPUT:
+#    1)df_list: dataframe that contains the sequences
+
+def load_data(dir_dataset, week_range):
+    week_range = [str(x) for x in week_range]
+    weeks_folder = [x for x in os.listdir(dir_dataset) if x in week_range]
+    df_list = []
+    w_list = []
+    for week in weeks_folder:
+        df_path = dir_dataset  + week +'/week_dataset.txt'
+        df = pd.read_csv(df_path, header=None)
+        # df = df[~df.iloc[:, 0].isin(id_unknown)]
+        df_list.append(df)
+        w_list += [week]*df.shape[0]
+        directory = os.path.join("c:\\", "path")
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                if file.endswith(".csv"):
+                    f = open(file, 'r')
+                    f.close()
+    return pd.concat(df_list), w_list
+
+# --/ get_lineage_class
+
+# function that return a lineage name 
+# INPUT 
+# metadata: file csv that contains the information of sequences
+# id_list: list that contains the id of sequences
+# OUTPUT
+# variant_name_list: list that contains the name of lineages 
+def get_lineage_class(metadata, id_list):
+    variant_name_list = []
+    for id in id_list:
+        variant_name_list.append(metadata[metadata['Accession.ID'] == id]['Pango.lineage'].values[0])
+    return variant_name_list
+
+# --/ map_lineage_to_finalclass
+
+def map_lineage_to_finalclass(class_list, non_neutral):
+    # -1 -> non-neutral
+    # 1 -> neutral
+    final_class_list = []
+    for c in class_list:
+        if c in non_neutral:
+            final_class_list.append(-1)
+        else:
+            final_class_list.append(1)
+    return final_class_list
+
+# --/ Calcolo_week
+
+# Calcolo_week : function that tells me how many weeks I need to predict 100 variants of the same type as anomalous
+# INPUT
+#    1)list that contains [['lineage1',predictions,week1],['lineage2',predictions,week1],['lineage2',predictions,week2]]. Where 'lineage' is the name of lineage, prediction is the number of predicte, prediction is the number of sequences defined as anomalous, week of simulation
+# OUTPUT
+#    2) list that contains the name of lineage and number of weeks to flag 100 sequences like anomalies 
+
+def Calcolo_week(a):
+    a_np = np.array(a)
+    Variants = a_np[:, 0]
+    Prediction = a_np[:, 1]
+    Prediction_int = [int(x) for x in Prediction]
+    Week = a_np[:, 2]
+    print(a_np[:, 1])
+    Variant = Counter(Variants)
+    new_list = []
+    summary_Final = []
+    for k in Variant.keys():
+        i_k = np.where(Variants == k)[0]
+        Variant_counter = Prediction[i_k]
+        Variant_counter_int = [int(x) for x in Variant_counter]
+        my_cum_sum_array = np.cumsum(Variant_counter_int)
+        if sum(Variant_counter_int) < 100:
+            continue
+
+        Index = np.where(my_cum_sum_array >= 100)
+        Interest_index = np.array(Index)
+        Interest_index_min = Interest_index[:, 0]
+        Index_to_week = i_k[Interest_index_min]
+        week_objective = int(Week[Index_to_week])
+        Index_start = np.array(np.where(Variants == k))
+        week_start = int(Week[Index_start[:, 0]])
+        summary = [k, week_objective - week_start]
+        summary_Final.append(summary)
+    return np.array(summary_Final)
+
+# --/ Autoencoder_training_GPU
+
+## INPUT
+# autoencoder: model defined in the script "model_dl.py"
+# train1 e train2: training set defined in the script "main_prediction_AE.py"
+# nb_epoch: number of epoch defined when you run the script "main_prediction_AE"
+# batch_size: batch_size defined when you run the script "main_prediction_AE"
+## OUTPUT
+# history: is the model trained (used in the script "main_prediction_AE") 
+
+def autoencoder_training_GPU(autoencoder, train1, train2, nb_epoch, batch_size):
+    # Assicurarsi che sia disponibile una GPU
+    if tf.config.experimental.list_physical_devices('GPU'):
+        # Configurare TensorFlow per utilizzare la GPU
+        with tf.device('/GPU:0'):
+            history = autoencoder.fit(train1, train2,
+                                      epochs=nb_epoch,
+                                      batch_size=batch_size,
+                                      shuffle=True,
+                                      verbose=1
+                                      ).history
+    else:
+        print("No GPU available. Using CPU instead.")
+        history = autoencoder.fit(train1, train2,
+                                  epochs=nb_epoch,
+                                  batch_size=batch_size,
+                                  shuffle=True,
+                                  verbose=1
+                                  ).history
+
+    return history
+
+# --/ Autoencoder_training
+## INPUT
+# autoencoder: model defined in the script "model_dl.py"
+# train1 e train2: training set defined in the script "main_prediction_AE.py"
+# nb_epoch: number of epoch defined when you run the script "main_prediction_AE"
+# batch_size: batch_size defined when you run the script "main_prediction_AE"
+## OUTPUT
+# history: is the model trained (used is in the script "main_prediction_AE") 
+
+def Autoencoder_training(autoencoder, train1,train2,nb_epoch,batch_size):
+    history = autoencoder.fit(train1, train2,
+                                  epochs=nb_epoch,
+                                  batch_size=batch_size,
+                                  shuffle=True,
+                                  #validation_data=(test_data, test_data),
+                                  verbose=1
+                                  ).history
+    return history
 
 
-def main(options):
+# --/ scoperta
+
+# scoperta : calculate how soon we discover the lineages
+#INPUT:
+#    1) measure_sensibilit: list that contains [['name_of_lineage',total_sequence, prediced_anomaly,week]] where total_sequence is the number of sequence in the week and prediced_anomaly is the number of sequences predicted as anomaly
+#OUTPUT
+#    1) final_distance: list that for each lineages contain the number of weeks before that the model identified as anomaly 
+
+def scoperta(measure_sensibilit):
+    final_distance=[]
+    week_identified_np=np.array([['B.1',11],['B.1.1 ',10],['B.1.177',44],['B.1.2',47],['B.1.1.7',56],['AY.44',82],['AY.43',105], ['AY.4',79],['AY.103',84],['B.1.617.2',87],['BA.1',107],['BA.2',111],['BA.2.9',111],['BA.2.3',121],['BA.2.12.1',126],['BA.5.1',134],['CH.1.1',156],['XBB.1.5',159]])
+    measure_sensibilit_np = np.array(measure_sensibilit) 
+    Varianti = measure_sensibilit_np[:, 0] #select the lineages 
+    variant_dict = Counter(Varianti) 
+    for k in variant_dict.keys(): 
+        if k == 'unknown':
+            continue
+        i_k = np.where(measure_sensibilit_np == k)[0] 
+        i_w = np.where(week_identified_np == k)[0]
+        week_identified= np.array(list(map(int, week_identified_np[i_w, 1]))) 
+        predetti = np.array(list(map(int, measure_sensibilit_np[i_k, 2]))) #prediction
+        week_an = np.array(list(map(int, measure_sensibilit_np[i_k, 3]))) #week
+        Index_first_detection=np.where(predetti>0)[0] 
+        if len(Index_first_detection)==0:
+            continue
+        week_fist_detection=min(list(week_an[Index_first_detection]))
+        week_fist_detection_true=week_fist_detection+1
+        distance=np.array(week_identified-week_fist_detection_true)
+        summary=[k,distance]
+        final_distance.append(summary)
+    return final_distance
+
+# --/ filter_dataset
+
+def trova_lineage_per_settimana(dataset, settimana, dizionario_lineage_settimane):
+    # Assume that the lineage column is the last one.
+    colonna_lineage = dataset.shape[1] - 1
+
+    # We extract the lineages for the specified week from the dictionary.
+    lineage_settimanali = dizionario_lineage_settimane[settimana]
+
+    # We create an empty ndarray to store the results.
+    risultati = np.empty((0, dataset.shape[1]), dtype=dataset.dtype)
+
+    # We iterate through the dataset and select only the rows with lineages corresponding to the specified week
+    for lineage in lineage_settimanali:
+        righe_selezionate = dataset[np.where(dataset[:, colonna_lineage] == lineage)]
+        risultati = np.vstack((risultati, righe_selezionate))
+
+    return risultati
+
+
+def trova_indici_lineage_per_settimana(column_lineage, week, dictionary_lineage_week):
+    # trova_indici_lineage_per_settimana : This function find the index of elements for new training set for each retraining week
+    # INPUT: 
+    #    1) column_lineage: lineages lineages examined up to the training week
+    #    2) week: week of retraining
+    # OUTPUT:
+    #    1) index_raw_np: indexes for new training set
+    # We extract the lineages for the specified week from the dictionary.
+    lineage_week = dictionary_lineage_week[week]
+
+    # We create an empty list to store the indexes of the corresponding rows.
+    index_raw = []
+
+    # We iterate through the lineage column and select only the row indices with lineages corresponding to the specified week
+    for i, lineage in enumerate(column_lineage):
+        if lineage in lineage_week:
+            index_raw.append(i)
+
+    # Converts indexes to an ndarray of integers.
+    index_raw_np = np.array(index_raw , dtype=int)
+
+    return index_raw_np
+
+# --/ test_normality_error
+
+def test_normality(autoencoder, train_model):
+    # Calculates autoencoder predictions on training data
+    predictions = autoencoder.predict(train_model)
+
+    # Calculates the MSE of the autoencoder on the training data.
+    mse = np.mean(np.power(train_model - predictions, 2), axis=1)
+
+
+    # Test the normality of the MSE using the Shapiro-Wilk test.
+    if len(mse)>3:
+        _, p_value = shapiro(mse.flatten())
+    else:
+        p_value=-1
+
+    return p_value,mse
+
+
+# --/ model_dl
+
+# model: function to create the moel
+# INPUT:
+#    1) input_dim: dimension of input 
+#    2) encodin_dim: dimension of encoding
+#    3) hidden_dim: dimension of deep layers
+#    4) reduction_factor
+#    5) path_salvataggio_file: path where to save the model
+# OUTPUT:
+#    1) the model
+def model(input_dim,encoding_dim,hidden_dim_1,hidden_dim_2,hidden_dim_3,hidden_dim_4,hidden_dim_5,reduction_factor,path_salvataggio_file):
+    # Input Layer
+    input_layer = tf.keras.layers.Input(shape=(input_dim,))
+
+    # Encoder
+    encoder = tf.keras.layers.Dense(encoding_dim, activation="tanh",
+                                    activity_regularizer=tf.keras.regularizers.l2(reduction_factor))(input_layer)
+    encoder = tf.keras.layers.Dropout(0.3)(encoder)  # reduce overfitting
+    encoder = tf.keras.layers.Dense(hidden_dim_1, activation='relu')(encoder)
+    encoder = tf.keras.layers.Dense(hidden_dim_2, activation='relu')(encoder)
+    encoder = tf.keras.layers.Dense(hidden_dim_3, activation='relu')(encoder)
+    encoder = tf.keras.layers.Dense(hidden_dim_4, activation='relu')(encoder)
+
+    # Strato centrale con rumore
+    latent = tf.keras.layers.Dense(hidden_dim_5, activation=tf.nn.leaky_relu)(encoder)
+    noise_factor = 0.1
+    latent_with_noise = tf.keras.layers.Lambda(
+        lambda x: x + noise_factor * tf.keras.backend.random_normal(shape=tf.shape(x)))(latent)
+
+    # Decoder
+    decoder = tf.keras.layers.Dense(hidden_dim_4, activation='relu')(latent_with_noise)
+    decoder = tf.keras.layers.Dense(hidden_dim_3, activation='relu')(decoder)
+    decoder = tf.keras.layers.Dense(hidden_dim_2, activation='relu')(decoder)
+    decoder = tf.keras.layers.Dense(hidden_dim_1, activation='relu')(decoder)
+    decoder = tf.keras.layers.Dropout(0.3)(decoder)
+    decoder = tf.keras.layers.Dense(encoding_dim, activation='relu')(decoder)
+
+    # Output
+    decoder = tf.keras.layers.Dense(input_dim, activation='tanh',
+                                    activity_regularizer=tf.keras.regularizers.l2(reduction_factor))(decoder)
+
+    # Autoencoder
+    autoencoder = tf.keras.Model(inputs=input_layer, outputs=decoder)
+    autoencoder.summary()
+
+    # Define the callbacks for checkpoints and early stopping
+    cp = tf.keras.callbacks.ModelCheckpoint(filepath=path_salvataggio_file + "/autoencoder_AERNS.h5",
+                                            mode='min', monitor='loss', verbose=2, save_best_only=True)
+    # define our early stopping
+    early_stop = tf.keras.callbacks.EarlyStopping(
+        monitor='loss',
+        min_delta=0.001,
+        patience=10,
+        verbose=1,
+        mode='min',
+        restore_best_weights=True)
+    # compile
+    autoencoder.compile(metrics=['mse'],
+                        loss='mean_squared_error',
+                        optimizer='adam')
+
+    return autoencoder
+
+# -- PRC_Graphic_curve
+
+# calcola_prc: calculate the PRC Curve
+# INPUT
+#     1) lists: list that contains precision and recall for each treshold 
+#     2) path_save: path_save_image
+# OUTPUT
+#    1) somme_precision: precision at different threshold 
+#    2) somme_recall: recall at different threshold 
+
+def calcola_prc(lists ,path_save):
+    # initialization of sums for each of the 40 columns
+    somme_precision = [0] * 40  
+    somme_recall=[0]*40
+
+    # Cycle through all sublists.
+    for sottolista in lists:
+        # Cycle through all 40 columns (positions).
+        for i in range(40):
+            # I take the sub-sublist corresponding to column i
+            sotto_sottolista = sottolista[i]
+
+            # I add the value corresponding to "precision" (index 1) to the sum for column i
+            somme_precision[i] += sotto_sottolista[1]
+            somme_recall[i] += sotto_sottolista[2]
+
+    # Printing sums
+    for i, somma in enumerate(somme_precision):
+        somme_precision[i] = somme_precision[i]/16
+        somme_recall[i] = somme_recall[i]/16
+
+    # Design PRC Curve
+    plt.figure(1)
+    plt.plot(somme_recall, somme_precision, '-', label='Autoencoder')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Precision-Recall Curve')
+    plt.legend()
+    plt.savefig(str(path_save)+'/PRC.jpg', bbox_inches='tight')
+    plt.show()
+    info_graph='done'
+
+    return somme_precision,somme_recall,info_graph
+
+# --/ plot_smooth
+
+# plot_sma: crate a smooth plot.
+# INPUT:
+#    1) vetttore: list
+#    2) window_size: size of window to do a plot
+#    3) path_salvataggio: path to save the file 
+# OUTPUT
+#    1) plot
+
+
+def plot_sma(vettore, window_size,path_salvataggio):
+    """
+    Calculates the Simple Moving Average (SMA) of a vector and plots it together with the barplot of the vector itself.
+    The window_size parameter indicates the size of the docker.
+    """
+    sma = np.convolve(vettore, np.ones(window_size) / window_size, mode='valid')  # Calcolo della SMA
+
+    fig, ax1 = plt.subplots(figsize=(20, 12))  # Create a figure and a subplot.
+
+    # Plot the bar graph
+    ax1.bar(range(len(vettore)), vettore, 0.4, color='#66c2a5', alpha=0.7)
+    ax1.plot(range(window_size - 1, len(vettore)), sma, 'r')
+    ax1.set_title(str('False positive rate'), fontsize=26)
+    #ax1.grid(False)  # Remove grid lines
+
+    ax1.set_xlabel('Week', fontsize=24)  # Set x-axis label
+    ax1.set_ylabel('False Positive Rate', fontsize=24)  # Set y-axis label
+    ax1.tick_params(axis='both', which='major', labelsize=24)  # Set tick label size
+
+    # Create an inset axes for the boxplot
+    ax2 = inset_axes(ax1, width="40%", height="30%", loc='upper center')
+    data_fp = {"False positive rate": vettore}
+    df_fp = pd.DataFrame(data_fp)
+    sns.boxplot(x="False positive rate", data=df_fp, ax=ax2)
+    ax2.set_xlabel("FPR", fontsize=22)
+    ax2.tick_params(axis='x', labelsize=22)  # Increase x-axis label size for boxplot
+    ax2.grid(False)  # Remove grid lines
+    plt.savefig(str(path_salvataggio)+'/FalsePositiveRate.png', bbox_inches='tight')
+    plt.show()
+
+
+def prediction_AE_main(options):
     # memory control
     gc.enable()
     # use GPU
     strategy = tf.distribute.MirroredStrategy()
-
+    
     # define a list that we will use during the code
     beta = []  # for 100
     measure_sensibilit = []  
@@ -63,7 +460,7 @@ def main(options):
     retraining_week, retraining_week_false_positive=weeks_retrain()
 
     # K-mers
-    header = pd.read_csv(str(options.kmers), nrows=1) 
+    header = pd.read_csv(str(options.kmers_file), nrows=1) 
     features = header.columns[1:].tolist()  # k-mers
     print('-----------------------------------------------------------------------------------')
     print('k-mers : ' + str(len(features)))
@@ -98,6 +495,8 @@ def main(options):
     # define the features mantain
     sum_train = np.sum(train_step1, axis=0)
     keepFeature=sum_train/len(train_step1)
+    print(keepFeature)
+    print(options.rate_mantain)
     i_no_zero = np.where(keepFeature >= options.rate_mantain)[0] 
 
     print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
@@ -530,4 +929,5 @@ if __name__ == "__main__":
                       help="red_factor", default=1e-7)
 
     (options, args) = parser.parse_args()
-    main(options)
+    print(options.rate_mantain)
+    prediction_AE_main(options)
