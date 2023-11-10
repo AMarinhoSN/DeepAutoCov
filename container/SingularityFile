@@ -3,16 +3,18 @@ From: ubuntu:22.04
 
 %post
 apt update
-apt install -y python-is-python3 wget
+apt install -y python3 python3-pip wget git
 
-wget https://bootstrap.pypa.io/get-pip.py
-python get-pip.py
+git clone https://github.com/AMarinhoSN/DeepAutoCov.git
+cd DeepAutoCov
+git checkout feature/add_app
+pip3 install -e ./
 
-pip install pandas tensorflow[and-cuda] scipy matplotlib seaborn numpy scikit-learn
 
 %test
-python -c "import tensorflow"
-python -c "import matplotlib"
-python -c "import seaborn"
-python -c "import numpy"
-python -c "import sklearn"
+python3 -c "import tensorflow"
+python3 -c "import matplotlib"
+python3 -c "import seaborn"
+python3 -c "import numpy"
+python3 -c "import sklearn"
+deepautocov -h
