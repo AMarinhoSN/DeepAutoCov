@@ -4,28 +4,72 @@ import deepautocov
 import os
 
 parser = argparse.ArgumentParser(
-        description="Feature extraction script"
+        description="DeepAutoCoV v0.1.0"
     )
 
-requiredNamed = parser.add_argument_group("required named arguments")
-requiredNamed.add_argument("-f", "--fasta", dest="fasta_path",
-    help="path to a SPIKE FASTA file")
+requiredMode = parser.add_argument_group("Execution modes")
 
-requiredNamed.add_argument("-c", "--csv", dest="csv_path",
+parser.add_argument("-c", "--csv", dest="csv_path",
     help="path to GISAID metadata CSV file")
 
-parser.add_argument("-n","--continent",dest="continent_list",
-    help="list of continents of interest [DEFAULT=['/']]", default=['/'])
+requiredMode.add_argument("mode", help="execution mode ['extract_features', 'main_prediction', 'detect_anomaly']", 
+    default=None)
 
-parser.add_argument("-m", "--minlen ", dest="min_length",
-    help="minimum length of sequence", default=1000)
+features_extract_args = parser.add_argument_group("[extract_features] arguments")
+features_extract_args.add_argument("-f", "--fasta", dest="fasta_path",
+    help="path to a SPIKE FASTA file")
 
-parser.add_argument("-l", "--median_limit ", dest="med_limit",
-    help="median range", default=30)
+features_extract_args.add_argument("-n","--continent",dest="continent_list",
+    help="list of continents of interest [default=['/']]", default=['/'])
 
-parser.add_argument("-o", "--output_dir", dest="save_path",
-    help="set ouput dir [DEFAULT=<current working directory>]", default=os.getcwd())
+features_extract_args.add_argument("-ml", "--minlen ", dest="min_length",
+    help="minimum length of sequence [default = 1000]", default=1000)
+
+features_extract_args.add_argument("-l", "--median_limit ", dest="med_limit",
+    help="median range [default = 30]", default=30)
+
+features_extract_args.add_argument("-o", "--output_dir", dest="save_path",
+    help="set ouput dir [default = <current working directory>]", default=os.getcwd())
+
+main_prediction_args = parser.add_argument_group("[main_prediction] arguments")
+
+main_prediction_args.add_argument("-p", "--pathdrive", dest="path_drive",
+    help="path to drive example: path/drive/") #,default="/blue/salemi/share/varcovid/dataset_febb_2023_little/")   # default
+
+#main_prediction_args.add_argument("-c", "--csv", dest="csv_path",
+#    help="path to CSV file metadata") #default="/blue/salemi/share/varcovid/filtered_metadatataset_010223_edit_200323.csv")
+
+main_prediction_args.add_argument("-k","--kmers",dest="kmers",
+    help="path of file kmers")#, default='/blue/salemi/share/varcovid/dataset_febb_2023_little/1/EPI_ISL_14307752.csv')
+
+main_prediction_args.add_argument("-s", "--pathsave ", dest="path_save",
+    help="path where we can save the file")#, default='/blue/salemi/share/varcovid/PAPAER_GROSSO/RISULTATI/WORLD_25_TH')
+
+main_prediction_args.add_argument("-m", "--mantain ", dest="rate_mantain",
+    help="rate for mantain the k-mers [default = 0.05]", default=0.05)
+
+main_prediction_args.add_argument("-e", "--Epoch ", dest="number_epoch",
+    help="number of epochs [default = 10]", default=10)
+
+main_prediction_args.add_argument("-b", "--Batchsize ", dest="batch_size",
+    help="number of batchsize in the first week [default = 256]", default=256)
+
+main_prediction_args.add_argument("-d", "--encoding dimension ", dest="encoding_dim",
+    help="encodin dimention [default=1024]", default=1024)
+
+main_prediction_args.add_argument("-r", "--reduction facor ", dest="red_factor",
+    help="red_factor [default = 1e-7]", default=1e-7)
 
 args = parser.parse_args()
 
-deepautocov.feature_extractor_main(args)
+# TODO print arguments and description before run
+
+VALID_MODES = ["extract_features", "main_prediction", "detect_anomalies"]
+
+if args.mode == "extract_features":
+    # TODO sanity check arguments
+    deepautocov.feature_extractor_main(args)
+
+if args.mode == "main_prediction":
+    # TODO sanity check arguments
+    deepautocov.prediction_AE_main(args)

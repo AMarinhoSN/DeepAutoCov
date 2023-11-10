@@ -1,1 +1,2 @@
 from .data_filtration_kmers_rewrite import feature_extractor_main
+from .main_prediction_AE_rewrite import prediction_AE_main
