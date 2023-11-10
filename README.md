@@ -8,6 +8,57 @@ bioRxiv 2023.10.24.563721; doi: https://doi.org/10.1101/2023.10.24.563721_
 Scripts to predict anomalies, i.e., Future Dominant Lineages (**FDLs**) with the Deep Learning AutoEncoder and to perform the simulation are located in the <code>model</code> folder.
 Scripts to generate the dataset and the feature representations are within the <code>Feature_Extraction</code> folder.
 
+## Setup and run quick guide
+
+First, clone the repo and checkout to develop branch:
+```
+git clone https://github.com/AMarinhoSN/DeepAutoCov.git
+cd DeepAutoCov/
+git checkout develop
+pip install ./
+```
+
+### run anomaly detection
+there are three modes of execution
+
+#### detect_anomalies
+To run on example data provided on the repo:
+
+> **[TODO]** add how to get access to the model
+
+
+```
+deepautocov detect_anomalies -fasta ./predict/Spikes_prova.fasta -ftrs ./predict/features.txt -mdl Autoencoder_models.h5 -json output/out.json
+```
+
+#### extract_features
+
+```
+deepautocov extract_features -f DeepAutoCov/data_github/Spikes_prova.fasta -c DeepAutoCov/data_github/pseudodataset.csv -o ./dataset/
+```
+#### main_predictor
+
+```
+deepautocov main_prediction -p ./input_data/Dataset_Samples/ -c ./input_data/filtered_metadatataset_010223_edit_200323.csv -s ./output/ -k_fl ./input_data/Dataset_Samples/1/EPI_ISL_14307752.csv
+```
+
+> **[TODO]** this one seens to be broken, I was not able to run end to end on the data provided. It needs to be debug it.
+
+### [OPTIONAL] container:
+
+A Singularity container recipe is provided, run the command bellow to build it:
+
+```
+sudo singularity build deepAutoCov.sif container/SingularityFile 
+```
+
+To run:
+
+```
+singularity exec /paht/to/deepAutoCov.sif deepautocov [args]
+```
+
+----
 ## Feature Extraction
 The file to create the dataset is <code>Data_filtration_kmers.py</code>. Example:
 <code>python Data_Filtration_kmers.py -f Spikes_prova.fasta -c pseudodataset.csv -m 1000 -l 30 -p /path/to/save/dataset_interest_2023 </code>
