@@ -1,17 +1,16 @@
-import os
 from keras.models import load_model
 import pandas as pd
 import numpy as np
 import csv
 
-def read_list_from_file(nome_file):
+def read_list_from_file(fpath):
     try:
-        with open(nome_file, 'r') as file:
-            # Leggi ogni riga del file e crea una lista con le righe come elementi
-            lista = [line.strip() for line in file]
-            return lista
+        with open(fpath, 'r') as file:
+            # read every row of the file and create a list with rows as elementes
+            row_list = [line.strip() for line in file]
+            return row_list
     except FileNotFoundError:
-        print(f"file '{nome_file}' not found.")
+        print(f"file '{fpath}' not found.")
         return None
     except Exception as e:
         print(f"Error: {str(e)}")
@@ -20,7 +19,9 @@ def read_list_from_file(nome_file):
 
 def read_fasta_seq_ID(file_path):
     """
-    Reads a FASTA file and returns two lists: one with sequence IDs and the other with the sequences.
+    Reads a FASTA file and returns two lists:
+    1) list with sequence IDs
+    2) list with the sequences.
 
     :param file_path: Path to the FASTA file to read.
     :return: A tuple of two lists, (list_of_sequence_ids, list_of_sequences).
@@ -65,7 +66,6 @@ def format_csv(seq,identificativo,kmers_tot,k,week,l,path):
         else:
             binary.append(0)
     kmers_tot=[None]+kmers_tot
-    #os.makedirs('/Users/utente/Desktop/Varcovid/Nuovi_dati/'+str(week))
     with open(str(path)+'/'+str(week)+'/'+str(identificativo)+'.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(kmers_tot)
@@ -83,7 +83,7 @@ def kmer_presence(sequence_kmers, total_kmers):
     :param total_kmers: List of total k-mers.
     :return: List of 0's and 1's representing the presence/absence of k-mers.
     """
-    # Inizializza una lista di 0 per ogni k-mer in total_kmers
+    # initialize a list of 0 for each kmer
     presence_sequence = [0] * len(total_kmers)
 
     # Imposta 1 se il k-mer è presente in sequence_kmers
@@ -97,7 +97,7 @@ def predict(data, threshold,model):
     input = data
     Autoencoders = load_model(str(model))
     # prediction
-    output= Autoencoders.predict(input)
+    output = Autoencoders.predict(input)
     # compute mse
     mse = np.mean(np.power(input - output, 2), axis=1)
     mse_list = list(mse)
@@ -123,37 +123,39 @@ def kmers_importance(prediction, true_sequence, kmers):
 
     return kmers_selected
 
-def selection_kmers(AE_prediction, True_sequences, kmers, AE_classes, identifier, output_filename="summary_KMERS.csv"):
-    ## INPUT
-    # AE_PREDICTION: sequences predictions provided by the model [list];
-    # True_sequence: real sequences encoded in the k-mers space [list];
-    # kmers: kmers filtered (kmers that are different from zero by at least 0.01 %) defined in the script "Main_prediction_AE" as "features_no_zero" [list];
-    # AE_classes: class defined by the model (1(normal),-1(anomaly)) [nparray];
-    # identifier: ID_Sequence [list];
-    # output_filename: path/name of file csv ["string"].
+def selection_kmers(AE_prediction, real_sequences, kmers, AE_classes, identifier):
+    """
 
-    ## OUTPUT
-    # file CSV :
-    #   1) The first column contain the id_sequence;
-    #   2) The other columns contain the k-mers;
+    :param AE_prediction:  sequences predictions provided by the model [list];
+    :param real_sequences: real sequences encoded in the k-mers space [list];
+    :param kmers: kmers filtered (kmers that are different from zero by at least 0.01 %) defined in the script "Main_prediction_AE" as "features_no_zero" [list];
+    :param AE_classes: class defined by the model (1(normal),-1(anomaly)) [nparray];
+    :param identifier: ID_Sequence [list];
+    :return: out_dict: dict. keys: id_sequences, value:list of kmers
+    """
 
     anomaly_indices = np.where(np.array(AE_classes) == -1)[0]
     AE_prediction_anomalies = [AE_prediction[i] for i in anomaly_indices]
-    True_sequences_anomalies = [True_sequences[i] for i in anomaly_indices]
+    real_sequences_anomalies = [real_sequences[i] for i in anomaly_indices]
     identificativo_anomalies = [identifier[i] for i in anomaly_indices]
-    summary = []
+    out_dict = {}
 
     for i in range(len(AE_prediction_anomalies)):
         prediction = AE_prediction_anomalies[i]
-        real = True_sequences_anomalies[i]
+        real = real_sequences_anomalies[i]
         kmers_selected = kmers_importance(prediction, real, kmers)
-        summary.append([identificativo_anomalies[i]] + kmers_selected)
+        out_dict[identificativo_anomalies[i]] = kmers_selected
+        # summary.append([identificativo_anomalies[i]] + kmers_selected)
 
+    return out_dict
     # Writing the summary to a CSV file
-    with open(output_filename, 'w', newline='') as csvfile:
+    """
+        with open(output_filename, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
         # Writing the header
         header = ['Seq ID'] + ['k-mer_' + str(i+1) for i in range(len(summary[0])-1)]
         csvwriter.writerow(header)
         # Writing the rows
         csvwriter.writerows(summary)
+        
+    """
