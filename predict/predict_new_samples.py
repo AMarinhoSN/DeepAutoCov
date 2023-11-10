@@ -1,9 +1,10 @@
 from optparse import OptionParser
 import sys
 from utils import *
+import json
 
 def main(options):
-    path_salvataggio_file = str(options.path_save)
+    output_path = str(options.path_save)
 
     print('Read the FASTA file of sequence')
     sequence_ids, sequences = read_fasta_seq_ID(str(options.fasta_path))
@@ -34,20 +35,21 @@ def main(options):
 
     print('Prediction')
     mse_list, prediction, outputs = predict(dataset_tot, threshold,str(options.model))
-    selection_kmers(outputs, dataset_tot, total_kmers , prediction, sequence_ids, output_filename=path_salvataggio_file+"/summary_KMERS.csv")
+    misrep_kmers = selection_kmers(outputs, dataset_tot, total_kmers , prediction, sequence_ids)
 
-    summary = []
+    out_dict = {}
     for i in range(0,len(mse_list)):
-        summary.append([sequence_ids[i],mse_list[i],prediction[i]])
+        # summary.append([sequence_ids[i],mse_list[i],prediction[i]])
+        info_dict = {}
+        if sequence_ids[i] in misrep_kmers.keys():
+            info_dict["misrepresented_kmers"] = misrep_kmers[sequence_ids[i]]
+        info_dict["is_anomaly"] = prediction[i]
+        info_dict["anomaly_score"] = mse_list[i]
+        out_dict[sequence_ids[i]] = info_dict
 
-    # create txt
-    with open(path_salvataggio_file + '/prediction_seq.txt', 'w') as file:
-        # Scrivi ogni elemento della lista in una nuova riga nel file
-        file.write('#Legend: -1:Anomaly, 1:Not Anomaly' + '\n')
-        file.write('Seq_ID, Anomaly_Score, Anomaly' + '\n')
-        for elemento in summary:
-            file.write(str(elemento[0]) + ','+str(round(elemento[1],3))+','+str(elemento[2]) + '\n')
-
+    # create json
+    with open(output_path, 'w') as file:
+        json.dump(out_dict, file)
     print('DONE!!')
 if __name__ == "__main__":
     parser = OptionParser()
@@ -72,8 +74,8 @@ if __name__ == "__main__":
     parser.add_option("-t", "--threshold ", dest="thr",
                       help="threshold",
                       default=0.03)
-    parser.add_option("-s", "--pathsave ", dest="path_save",
-                      help="path where we can save the file",
+    parser.add_option("-o", "--pathsave ", dest="path_save",
+                      help="path of output json file",
                       default='')
     (options, args) = parser.parse_args()
     main(options)
