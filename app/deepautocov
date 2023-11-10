@@ -66,27 +66,27 @@ main_prediction_args.add_argument("-r", "--reduction facor ", dest="red_factor",
 # ---/ predict mode args /---
 predict_args = parser.add_argument_group("[predict] arguments")
 
-parser.add_argument("-fasta", dest="fasta_path",
+predict_args.add_argument("-fasta", dest="fasta_path",
     help="path to fasta file: path/fasta",
     default="")
 
-parser.add_argument("-ftrs", "--pathfeatures", dest="features_path",
+predict_args.add_argument("-ftrs", "--pathfeatures", dest="features_path",
     help="path to txt features",
     default="")
 
-parser.add_argument("-k", "--kmers", dest="kmers",
-    help='kmers', default= 3)
-
-parser.add_argument("-mdl", "--model ", dest="model",
-    help="path model", default='')
-
-parser.add_argument("-t", "--threshold ", dest="thr",
-    help="threshold",
-    default=0.03)
-
-parser.add_argument("-json", "--json_flnm ", dest="json_file",
+predict_args.add_argument("-json", "--json_flnm ", dest="json_file",
     help="path of output json file",
     default='')
+
+predict_args.add_argument("-mdl", "--model ", dest="model",
+    help="path to model file", default='')
+
+predict_args.add_argument("-k", "--kmers", dest="kmers",
+    help='kmers size [default = 3]', default= 3)
+
+predict_args.add_argument("-t", "--threshold ", dest="thr",
+    help="threshold [default = 0.03]", default=0.03)
+
 
 
 args = parser.parse_args()
