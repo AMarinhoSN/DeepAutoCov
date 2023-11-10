@@ -460,7 +460,7 @@ def prediction_AE_main(options):
     retraining_week, retraining_week_false_positive=weeks_retrain()
 
     # K-mers
-    header = pd.read_csv(str(options.kmers), nrows=1) 
+    header = pd.read_csv(str(options.kmers_file), nrows=1) 
     features = header.columns[1:].tolist()  # k-mers
     print('-----------------------------------------------------------------------------------')
     print('k-mers : ' + str(len(features)))

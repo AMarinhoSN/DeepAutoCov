@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(
 requiredMode = parser.add_argument_group("Execution modes")
 
 parser.add_argument("-c", "--csv", dest="csv_path",
-    help="path to GISAID metadata CSV file")
+    help="path to GISAID metadata CSV file [Required for extract_features and main_prediction modes")
 
 requiredMode.add_argument("mode", help="execution mode ['extract_features', 'main_prediction', 'detect_anomaly']", 
     default=None)
@@ -31,6 +31,7 @@ features_extract_args.add_argument("-l", "--median_limit ", dest="med_limit",
 features_extract_args.add_argument("-o", "--output_dir", dest="save_path",
     help="set ouput dir [default = <current working directory>]", default=os.getcwd())
 
+# ---/ main prediction mode args /---
 main_prediction_args = parser.add_argument_group("[main_prediction] arguments")
 
 main_prediction_args.add_argument("-p", "--pathdrive", dest="path_drive",
@@ -39,10 +40,10 @@ main_prediction_args.add_argument("-p", "--pathdrive", dest="path_drive",
 #main_prediction_args.add_argument("-c", "--csv", dest="csv_path",
 #    help="path to CSV file metadata") #default="/blue/salemi/share/varcovid/filtered_metadatataset_010223_edit_200323.csv")
 
-main_prediction_args.add_argument("-k","--kmers",dest="kmers",
+main_prediction_args.add_argument("-k_fl","--kmers_file",dest="kmers_file",
     help="path of file kmers")#, default='/blue/salemi/share/varcovid/dataset_febb_2023_little/1/EPI_ISL_14307752.csv')
 
-main_prediction_args.add_argument("-s", "--pathsave ", dest="path_save",
+main_prediction_args.add_argument("-s", "--pathsave", dest="path_save",
     help="path where we can save the file")#, default='/blue/salemi/share/varcovid/PAPAER_GROSSO/RISULTATI/WORLD_25_TH')
 
 main_prediction_args.add_argument("-m", "--mantain ", dest="rate_mantain",
@@ -60,11 +61,48 @@ main_prediction_args.add_argument("-d", "--encoding dimension ", dest="encoding_
 main_prediction_args.add_argument("-r", "--reduction facor ", dest="red_factor",
     help="red_factor [default = 1e-7]", default=1e-7)
 
+# -----------------------------------
+
+# ---/ predict mode args /---
+predict_args = parser.add_argument_group("[predict] arguments")
+
+parser.add_argument("-fasta", dest="fasta_path",
+    help="path to fasta file: path/fasta",
+    default="")
+
+parser.add_argument("-ftrs", "--pathfeatures", dest="features_path",
+    help="path to txt features",
+    default="")
+
+parser.add_argument("-k", "--kmers", dest="kmers",
+    help='kmers', default= 3)
+
+parser.add_argument("-mdl", "--model ", dest="model",
+    help="path model", default='')
+
+parser.add_argument("-t", "--threshold ", dest="thr",
+    help="threshold",
+    default=0.03)
+
+parser.add_argument("-json", "--json_flnm ", dest="json_file",
+    help="path of output json file",
+    default='')
+
+
 args = parser.parse_args()
 
 # TODO print arguments and description before run
 
 VALID_MODES = ["extract_features", "main_prediction", "detect_anomalies"]
+
+if args.mode == None:
+    print("ERROR: no mode of execution provided")
+    exit(1)
+
+if args.mode not in VALID_MODES:
+    print(f"ERROR: {args.mode} is not a valid mode.")
+    print(f"      VALID_MODES = {VALID_MODES}")
+    exit(1)
 
 if args.mode == "extract_features":
     # TODO sanity check arguments
@@ -73,3 +111,6 @@ if args.mode == "extract_features":
 if args.mode == "main_prediction":
     # TODO sanity check arguments
     deepautocov.prediction_AE_main(args)
+
+if args.mode == "detect_anomalies":
+    deepautocov.predict_main(args)
