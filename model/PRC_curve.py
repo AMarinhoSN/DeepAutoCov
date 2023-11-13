@@ -72,7 +72,7 @@ def evaluate_pcr(true_classes, mses, init_threshold, min_threshold, max_threshol
     #    4)min_threshold: minimum of mse
     #    5)max_threshold: maximum of mse
     # OUTPUT
-    #    Soglia_info: list that for each treshold contains the precision and recall
+    #    PRC_info: list that for each treshold contains the precision and recall
     """
     step = 0.03 * init_threshold
     PRC_info=[]
