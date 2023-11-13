@@ -112,14 +112,30 @@ def remove_asterisks(sequence):
 
 
 def kmers_importance(prediction, true_sequence, kmers):
+    """
+    This function identifies the most important k-mers based on the differences between predicted and true sequences.
+
+    Parameters:
+    - prediction: A list of predicted sequence values.
+    - true_sequence: A list of actual sequence values.
+    - kmers: A list of k-mers.
+
+    Returns:
+    - kmers_selected: A list of k-mers where the difference between the predicted and true sequence is greater than 0.99.
+    """
+
     differences = []
+    # Calculate the differences between each predicted and true sequence value.
     for i in range(len(prediction)):
         seq_pred = prediction[i]
         seq_real = true_sequence[i]
         differences.append(seq_pred - seq_real)
-    sorted_indices = sorted(range(len(differences)), key=lambda k: differences[k], reverse=True)
-    top_6_indices = sorted_indices[:6]
-    kmers_selected = [kmers[i] for i in top_6_indices]
+
+    # Select the indices where the difference is greater than 0.99.
+    selected_indices = [i for i, diff in enumerate(differences) if diff > 0.99]
+
+    # Retrieve the k-mers corresponding to these selected indices.
+    kmers_selected = [kmers[i] for i in selected_indices]
 
     return kmers_selected
 
