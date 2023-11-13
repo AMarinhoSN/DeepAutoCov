@@ -75,7 +75,6 @@ def evaluate_pcr(true_classes, mses, init_threshold, min_threshold, max_threshol
     #    Soglia_info: list that for each treshold contains the precision and recall
     """
     step = 0.03 * init_threshold
-    passi=40
     PRC_info=[]
     for threshold in np.linspace(min_threshold-0.01, max_threshold+0.01, 40):
         TP_TOT, TN_TOT, FP_TOT, FN_TOT = 0, 0, 0, 0
