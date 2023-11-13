@@ -5,7 +5,7 @@ def measure_of_variants(TP,FP,TN,FN,k,week,path_save_file):
     precision=TP/(TP+FP+0.0001)
     recall=TP/(TP+FN+0.0001)
     specificity=TN/(TN+FP+0.0001)
-    # Grafici
+    # plots
 
     #precision
     plt.figure(figsize=(17, 8))
