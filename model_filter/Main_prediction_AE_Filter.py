@@ -53,7 +53,7 @@ def main(options):
     col_lineage_id = 'Accession.ID'
 
     ## Processing of Data
-    valid_lineage, valid_lineage_prc, dizionario_lineage_settimane, lineages_know = lineages_of_interest() # Function that return the Future Dominant Lineages (FDLs) of Interest.
+    valid_lineage, valid_lineage_prc, dictionary_lineages_week, lineages_know = lineages_of_interest() # Function that return the Future Dominant Lineages (FDLs) of Interest.
 
     metadata[col_class_lineage] = metadata[col_class_lineage].apply(lambda x: 'unknown' if x not in valid_lineage else x) # Replacement of non-FDLs by unknown.
 
@@ -148,39 +148,38 @@ def main(options):
                 logging.info('----> RETRAINING <-----')
                 ind_prc = ind_prc + 1
 
-                # We create a new training set for retrain the network
-                train_model_value = train_step_complete_rw # soloziono solo i kmaers
-                classi=lineages_train #seleziono solo i valori
+                # Creation of new training set to train the model.
+                # Filter out unrepresentative features
+                train_model_value = train_step_complete_rw
+                classes=lineages_train #seleziono solo i valori
                 sum_train = np.sum(train_model_value, axis=0)
                 keepFeature = sum_train / len(train_model_value)
                 i_no_zero = np.where(keepFeature > options.rate_mantain)[0]
 
                 number_feature = len(i_no_zero)
                 print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
-                print('il numero di feature in almeno il 5% delle sequenze diverso da zero sono :' + str((len(i_no_zero))))
+                print('features of model :' + str((len(i_no_zero))))
                 print('---------------------------------------------------------------------------------------------------------------------------------------------------------')
 
-                train_model_value = train_model_value[:, i_no_zero]
-
-                # seleziono le righe di interesse
-                index_raw = trova_indici_lineage_per_settimana(classi, week, dizionario_lineage_settimane) # prende in ingresso solo le classi
+                train_model_value = train_model_value[:, i_no_zero] # Filter training set with the features of model.
+                index_raw = find_indices_lineage_per_week(classes, week, dictionary_lineages_week)  # return index to create the new training set
                 train_model_value=train_model_value[index_raw,:]
                 np.random.shuffle(train_model_value)
-                number_of_feature.append(number_feature)
+                number_of_feature.append(number_feature) # Store the number of features in the retraining week.
 
                 batch_size=512
                 input_dim =train_model_value.shape[1]
                 with strategy.scope():
                     autoencoder=model(input_dim, encoding_dim, hidden_dim_1, hidden_dim_2, hidden_dim_3, hidden_dim_4, hidden_dim_5,
-                          reduction_factor, path_save_file)
-                history = autoencoder_training_GPU(autoencoder, train_model_value, train_model_value, nb_epoch, batch_size)
+                          reduction_factor, path_save_file) # Creation of the AutoEncoder model.
+                history = autoencoder_training_GPU(autoencoder, train_model_value, train_model_value, nb_epoch, batch_size) # retraining the model.
 
-                print('Ho allenato la rete neurale : ')
+                print('the model is trained ! : ')
                 print(history)
 
                 info,mse_tr = test_normality(autoencoder, train_model_value)
                 train_model_value = []
-                classi=[]
+                classes=[]
             logging.info("# Week " + str(starting_week + week))
             print("# Week " + str(starting_week + week))
 

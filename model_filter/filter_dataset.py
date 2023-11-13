@@ -1,68 +1,66 @@
 import numpy as np
 
-def trova_lineage_per_settimana(dataset, settimana, dizionario_lineage_settimane):
-    # Assumiamo che la colonna dei lineage sia l'ultima
-    colonna_lineage = dataset.shape[1] - 1
 
-    # Estraiamo i lineage per la settimana specificata dal dizionario
-    lineage_settimanali = dizionario_lineage_settimane[settimana]
+def find_lineage_per_week(dataset, week, dictionary_lineage_weeks):
+    """
+    This function filters a dataset to retrieve rows corresponding to specific lineages for a given week.
 
-    # Creiamo un ndarray vuoto per memorizzare i risultati
-    risultati = np.empty((0, dataset.shape[1]), dtype=dataset.dtype)
+    Parameters:
+    - dataset: The dataset to be filtered, assumed to be a NumPy array.
+    - week: The specific week for which lineages are to be filtered.
+    - dictionary_lineage_weeks: A dictionary mapping weeks to lineages.
 
-    # Iteriamo attraverso il dataset e selezioniamo solo le righe con i lineage corrispondenti alla settimana specificata
-    for lineage in lineage_settimanali:
-        righe_selezionate = dataset[np.where(dataset[:, colonna_lineage] == lineage)]
-        risultati = np.vstack((risultati, righe_selezionate))
+    Returns:
+    - results: A NumPy array containing the filtered dataset rows.
+    """
 
-    return risultati
+    # Assume that the lineage column is the last column in the dataset.
+    lineage_column = dataset.shape[1] - 1
+
+    # Extract the lineages for the specified week from the dictionary.
+    weekly_lineages = dictionary_lineage_weeks[week]
+
+    # Create an empty NumPy array to store the results.
+    results = np.empty((0, dataset.shape[1]), dtype=dataset.dtype)
+
+    # Iterate through the dataset and select only the rows with lineages that correspond to the specified week.
+    for lineage in weekly_lineages:
+        # Find the rows in the dataset where the lineage matches.
+        selected_rows = dataset[np.where(dataset[:, lineage_column] == lineage)]
+
+        # Stack the selected rows onto the results array.
+        results = np.vstack((results, selected_rows))
+
+    # Return the array containing the selected rows.
+    return results
 
 
-def trova_indici_lineage_per_settimana(colonna_lineage, settimana, dizionario_lineage_settimane):
-    # Estraiamo i lineage per la settimana specificata dal dizionario
-    lineage_settimanali = dizionario_lineage_settimane[settimana]
+def find_indices_lineage_per_week(lineage_column, week, dictionary_lineage_weeks):
+    """
+    This function finds row indices in a dataset for specific lineages corresponding to a given week.
 
-    # Creiamo una lista vuota per memorizzare gli indici delle righe corrispondenti
-    indici_righe = []
+    Parameters:
+    - lineage_column: The column in the dataset containing lineage information.
+    - week: The specific week for which lineages are to be matched.
+    - dictionary_lineage_weeks: A dictionary mapping weeks to lineages.
 
-    # Iteriamo attraverso la colonna dei lineage e selezioniamo solo gli indici delle righe con i lineage corrispondenti alla settimana specificata
-    for i, lineage in enumerate(colonna_lineage):
-        if lineage in lineage_settimanali:
-            indici_righe.append(i)
+    Returns:
+    - indices_rows_np: A NumPy array of integers containing the indices of rows matching the specified lineages for the week.
+    """
 
-    # Converte gli indici in un ndarray di interi
-    indici_righe_np = np.array(indici_righe, dtype=int)
+    # Extract the lineages for the specified week from the dictionary.
+    weekly_lineages = dictionary_lineage_weeks[week]
 
-    return indici_righe_np
+    # Create an empty list to store the indices of corresponding rows.
+    indices_rows = []
 
-# # Dataset di esempio (senza la colonna delle settimane)
-# # Le colonne rappresentano: ID, Valore, Lineage
-# dataset = np.array([
-#     [1, 10, 'A'],
-#     [2, 20, 'B'],
-#     [3, 15, 'A'],
-#     [4, 25, 'C'],
-#     [5, 30, 'B'],
-#     [6, 40, 'A'],
-#     [7, 35, 'C'],
-# ], dtype=object)
-#
-# # Dizionario di esempio: mappa le settimane ai gruppi di lineage
-# dizionario_lineage_settimane = {
-#     1: ['A', 'B'],
-#     2: ['C'],
-# }
-#
-# # Chiamiamo la funzione per trovare i lineage nella settimana 1
-# risultati_settimana_1 = trova_lineage_per_settimana(dataset, 1, dizionario_lineage_settimane)
-#
-# # Visualizziamo il risultato
-# print("Risultati per la settimana 1:")
-# print(risultati_settimana_1)
-#
-# # Chiamiamo la funzione per trovare i lineage nella settimana 2
-# risultati_settimana_2 = trova_lineage_per_settimana(dataset, 2, dizionario_lineage_settimane)
-#
-# # Visualizziamo il risultato
-# print("\nRisultati per la settimana 2:")
-# print(risultati_settimana_2)
+    # Iterate through the lineage column and select only the indices of rows with lineages corresponding to the specified week.
+    for i, lineage in enumerate(lineage_column):
+        if lineage in weekly_lineages:
+            indices_rows.append(i)
+
+    # Convert the indices list to a NumPy array of integers.
+    indices_rows_np = np.array(indices_rows, dtype=int)
+
+    # Return the array of indices.
+    return indices_rows_np
