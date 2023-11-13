@@ -6,8 +6,8 @@ import pandas as pd
 
 def plot_sma(vettore, window_size,path_salvataggio):
     """
-    Calcola la Simple Moving Average (SMA) di un vettore e ne fa il plot insieme al barplot del vettore stesso.
-    Il parametro window_size indica la dimensione della finestra mobile.
+    It calculates the Simple Moving Average (SMA) of a vector and plots it together with the barplot of the vector.
+    The window_size parameter indicates the size of the moving window.
     """
     sma = np.convolve(vettore, np.ones(window_size) / window_size, mode='valid')  # Calcolo della SMA
 
