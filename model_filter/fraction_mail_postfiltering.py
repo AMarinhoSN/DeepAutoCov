@@ -1,8 +1,19 @@
 import numpy as np
 import pandas as pd
 
+# Top100: Function to calculate the number of True Positives and False Positives among the 100 sequences with the highest Mean Squared Error (MSE) values.
+# INPUT
+#     1)mse: list of Mean Squared Error (MSE)
+#     2)y_test_step_i: type of lineages in test set
+#     3)week: week of simulation
+#     4)threshold: threshold
+#     5)n: 100
+# OUTPUT
+#    1) FP: False Positive
+#    2) TP: True Positive
+#    3) N: number of sequences
 
-def sceltaN(mse, y_test_step_i, week, soglia, n,lineage_known):
+def Top100(mse, y_test_step_i, week, soglia, n, lineage_known):
     settimana_giusta = week + 1
     mse_var = []
     FP_TOT = []
