@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-def best_worst(path_salvataggio):
+def best_worst(path_save):
     # The Best
     data = {
         'lineage': ['BA.2', 'BA.1', 'BA.2.9', 'B.1.617.2', 'AY.43'],
@@ -73,7 +73,7 @@ def best_worst(path_salvataggio):
 
     ax.legend(fontsize=20)
     plt.title('World-Best Performance Lineages', fontsize=26)
-    plt.savefig(str(path_salvataggio)+'/WorldPerformance.png', bbox_inches='tight')
+    plt.savefig(str(path_save)+'/WorldPerformance.png', bbox_inches='tight')
 
     plt.show()
 
@@ -149,7 +149,7 @@ def best_worst(path_salvataggio):
 
     ax.legend(fontsize=20)
     plt.title('World-Worse Performance Lineages', fontsize=26)
-    plt.savefig(str(path_salvataggio)+'/WorldPerformanceworst.png', bbox_inches='tight')
+    plt.savefig(str(path_save)+'/WorldPerformanceworst.png', bbox_inches='tight')
 
     plt.show()
 
