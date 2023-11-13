@@ -1,44 +1,33 @@
 import numpy as np
 
-def trova_lineage_per_settimana(dataset, settimana, dizionario_lineage_settimane):
-    # Assume that the lineage column is the last one.
-    colonna_lineage = dataset.shape[1] - 1
+def find_index_lineages_for_week(column_lineage, week, dictionary_lineage_week):
+    """
+    This function finds the indices of elements for a new training set for each retraining week.
+    Parameters:
+    - column_lineage: A list or array of lineage information examined up to the training week.
+    - week: The specific week of retraining.
+    - dictionary_lineage_week: A dictionary mapping weeks to specific lineages.
 
-    # We extract the lineages for the specified week from the dictionary.
-    lineage_settimanali = dizionario_lineage_settimane[settimana]
+    Returns:
+    - index_raw_np: An array of indices for the new training set.
+    """
 
-    # We create an empty ndarray to store the results.
-    risultati = np.empty((0, dataset.shape[1]), dtype=dataset.dtype)
-
-    # We iterate through the dataset and select only the rows with lineages corresponding to the specified week
-    for lineage in lineage_settimanali:
-        righe_selezionate = dataset[np.where(dataset[:, colonna_lineage] == lineage)]
-        risultati = np.vstack((risultati, righe_selezionate))
-
-    return risultati
-
-
-def trova_indici_lineage_per_settimana(column_lineage, week, dictionary_lineage_week):
-    # trova_indici_lineage_per_settimana : This function find the index of elements for new training set for each retraining week
-    # INPUT: 
-    #    1) column_lineage: lineages lineages examined up to the training week
-    #    2) week: week of retraining
-    # OUTPUT:
-    #    1) index_raw_np: indexes for new training set
-    # We extract the lineages for the specified week from the dictionary.
+    # Extract the specific lineages for the given week from the dictionary.
     lineage_week = dictionary_lineage_week[week]
 
-    # We create an empty list to store the indexes of the corresponding rows.
+    # Create an empty list to store indices of rows whose lineages correspond to the specified week.
     index_raw = []
 
-    # We iterate through the lineage column and select only the row indices with lineages corresponding to the specified week
+    # Iterate through each lineage in the column_lineage.
     for i, lineage in enumerate(column_lineage):
+        # If the lineage is one of those designated for the specified week, add its index to the list.
         if lineage in lineage_week:
             index_raw.append(i)
 
-    # Converts indexes to an ndarray of integers.
-    index_raw_np = np.array(index_raw , dtype=int)
+    # Convert the list of indices to a NumPy array of integers.
+    index_raw_np = np.array(index_raw, dtype=int)
 
+    # Return the array of indices.
     return index_raw_np
 
 

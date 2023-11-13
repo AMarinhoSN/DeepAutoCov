@@ -1,19 +1,19 @@
 import numpy as np
 import pandas as pd
 
-# sceltaN: function to compute the precision of top 100
+# Top100: Function to calculate the number of True Positives and False Positives among the 100 sequences with the highest Mean Squared Error (MSE) values.
 # INPUT
-#     1)mse: list of mse 
-#     2)y_test_step_i: lineages in test set
+#     1)mse: list of Mean Squared Error (MSE)
+#     2)y_test_step_i: type of lineages in test set
 #     3)week: week of simulation 
-#     4)soglia: threshold 
+#     4)threshold: threshold
 #     5)n: 100
 # OUTPUT
 #    1) FP: False Positive
 #    2) TP: True Positive
 #    3) N: number of sequences
 
-def sceltaN(mse, y_test_step_i, week, soglia, n):
+def Top100(mse, y_test_step_i, week, threshold, n):
     settimana_giusta = week + 1
     mse_var = []
     FP_TOT = []
@@ -24,7 +24,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
     mse_var_np = np.array(mse_var)
     mse_np = np.array(list(map(float, mse_var_np[:, 0])))
     if week < 10:
-        i_anomalie_mse = np.where(mse_np > soglia) # I find the indices of true anomalies.
+        i_anomalie_mse = np.where(mse_np > threshold) # I find the indices of true anomalies.
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -38,7 +38,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 TP = TP + 1
 
     if week >= 10 and week < 11:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -52,7 +52,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 TP = TP + 1
 
     if week >= 11 and week < 44:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -66,7 +66,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 TP = TP + 1
 
     if week >= 44 and week < 47:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -80,7 +80,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 TP = TP + 1
 
     if week >= 47 and week < 56:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -94,7 +94,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 TP = TP + 1
 
     if week >= 56 and week < 79:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -108,7 +108,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 TP = TP + 1
 
     if week >= 79 and week < 82:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -122,7 +122,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 TP = TP + 1
 
     if week >= 82 and week < 84:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :] 
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -136,7 +136,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 TP = TP + 1
 
     if week >= 84 and week < 87:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -150,7 +150,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 TP = TP + 1
 
     if week >= 87 and week < 105:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -163,7 +163,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
             else:
                 TP = TP + 1
     if week >= 105 and week < 107:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -180,7 +180,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
                 TP = TP + 1
 
     if week >= 107 and week < 111:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -196,7 +196,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
             else:
                 TP = TP + 1
     if week >= 111 and week < 121:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -213,7 +213,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
             else:
                 TP = TP + 1
     if week >= 121 and week < 126:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -230,7 +230,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
             else:
                 TP = TP + 1
     if week >= 126 and week < 134:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :] 
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -248,7 +248,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
             else:
                 TP = TP + 1
     if week >= 134 and week < 156:
-        i_anomalie_mse = np.where(mse_np > soglia) 
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -266,7 +266,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
             else:
                 TP = TP + 1
     if week >= 156 and week < 159:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
@@ -284,7 +284,7 @@ def sceltaN(mse, y_test_step_i, week, soglia, n):
             else:
                 TP = TP + 1
     if week >= 159 and week < 160:
-        i_anomalie_mse = np.where(mse_np > soglia)  
+        i_anomalie_mse = np.where(mse_np > threshold)
         mse_var_np_filtr = mse_var_np[i_anomalie_mse, :]  
         if n > len(mse_var_np_filtr[0, :, 0]):
             n = len(mse_var_np_filtr[0, :, 0])
