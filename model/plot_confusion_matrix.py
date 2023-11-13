@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 
-def plot_confusion_matrix(tp, fp, tn, fn, k, week, path_salvataggio):
+def plot_confusion_matrix(tp, fp, tn, fn, k, week, path_save):
   """
   This function plots and saves a confusion matrix.
   Parameters:
@@ -48,7 +48,7 @@ def plot_confusion_matrix(tp, fp, tn, fn, k, week, path_salvataggio):
       ax.text(j, i, cm[i][j], ha='center', va='center', color='black')
 
   # Save the confusion matrix plot to the specified path.
-  plt.savefig(path_salvataggio + '/Confusion_matrix_image_of_variant' + k + '_week' + str(week) + '.png')
+  plt.savefig(path_save + '/Confusion_matrix_image_of_variant' + k + '_week' + str(week) + '.png')
 
   # Close the plot to free up memory.
   plt.close()
