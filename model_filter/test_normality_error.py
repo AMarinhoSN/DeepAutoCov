@@ -2,14 +2,14 @@ from scipy.stats import shapiro
 import numpy as np
 
 def test_normality(autoencoder, train_model):
-    # Calcola le previsioni dell'autoencoder sui dati di addestramento
+    # Calculates autoencoder predictions on training data.
     predictions = autoencoder.predict(train_model)
 
-    # Calcola l'MSE dell'autoencoder sui dati di addestramento
+    # Calculates the MSE of the autoencoder on the training data.
     mse = np.mean(np.power(train_model - predictions, 2), axis=1)
 
 
-    # Testa la normalità dell'MSE utilizzando il test di Shapiro-Wilk
+    # Test the normality of the MSE using the Shapiro-Wilk test.
     if len(mse)>3:
         _, p_value = shapiro(mse.flatten())
     else:
