@@ -243,11 +243,11 @@ def main(options):
             top_indices_100 = mse_top100_anomaly.argsort()[-size:][::-1] # sort the MSE
             lineages_predicted_top_100 = lineage_top100_anomaly[top_indices_100]
 
-            # Filtering with the biological knowledge (double check)
+            ## Filtering with the biological knowledge (double check)
             prediction = list(-np.ones(size))
             prediction_filtering = lookup_post(prediction, lineages_predicted_top_100, lineages_know[ind_prc]) # Filter the prediction
 
-            # Find the anomalies after filtering
+            ## Find the anomalies after filtering
             prediction_filtering = np.array(prediction_filtering)
             index_anomaly_filter = np.where(prediction_filtering == -1)[0] # Find the anomalies.
             lineages_predicted_top_100 = lineages_predicted_top_100[index_anomaly_filter]
@@ -261,13 +261,11 @@ def main(options):
 
             # Write the file in txt the prediction
             with open(path_save_file+'/TOP_100_FILTERING.txt', 'w') as file:
-                # Scrivi ogni elemento della lista in una nuova riga nel file
                 for elemento in summary_100_anomalies:
                     file.write(str(elemento) + '\n')
 
             # Write the file in txt the prediction precision
             with open(path_save_file + '/TOP_100_FILTERING_PERCENTAGE.txt', 'w') as file:
-                # Scrivi ogni elemento della lista in una nuova riga nel file
                 for elemento in summary_100_anomalies_percentage:
                     file.write(str(elemento) + '\n')
 
