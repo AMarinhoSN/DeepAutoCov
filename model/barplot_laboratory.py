@@ -1,13 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def graphic_fraction(AA, N, path_salvataggio_file):
+def graphic_fraction(AA, N, path_save_file):
     # This function creates a bar chart representing the fraction of True Positives (TP)
     # over the total count (N) for different amino acids (AA).
     # Parameters:
     # AA: A list or array containing the amino acid data.
     # N: A numerical identifier or count.
-    # path_salvataggio_file: The file path where the graph image will be saved.
+    # path_save_file: The file path where the graph image will be saved.
 
     # Initialize an empty list to store x-axis values.
     x = []
@@ -61,7 +61,7 @@ def graphic_fraction(AA, N, path_salvataggio_file):
 
     # Adjust layout and save the figure to the specified path.
     fig.tight_layout()
-    plt.savefig(path_salvataggio_file + '/Fraction_general' + str(N) + '.png')
+    plt.savefig(path_save_file + '/Fraction_general' + str(N) + '.png')
 
     # Return a string indicating the saving action.
     k = 'Save'
