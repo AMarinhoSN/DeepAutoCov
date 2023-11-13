@@ -50,7 +50,7 @@ def graphic_fraction(AA,N,path_save_file):
     plt.savefig(path_save_file + '/Fraction_general' + str(N) + '.png')
 
 
-    k='Salvato'
+    k='Save'
     return k
 
 # k=graphic_fraction(AA_100,100)
