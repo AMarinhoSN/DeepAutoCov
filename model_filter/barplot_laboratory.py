@@ -4,7 +4,7 @@ import matplotlib
 import pandas as pd
 import seaborn as sns
 
-def graphic_fraction(AA,N,path_salvataggio_file):
+def graphic_fraction(AA,N,path_save_file):
     x=[]
 
     AA_np=np.array(AA)
@@ -47,7 +47,7 @@ def graphic_fraction(AA,N,path_salvataggio_file):
     #autolabel(rects3)
 
     fig.tight_layout()
-    plt.savefig(path_salvataggio_file + '/Fraction_general' + str(N) + '.png')
+    plt.savefig(path_save_file + '/Fraction_general' + str(N) + '.png')
 
 
     k='Salvato'
