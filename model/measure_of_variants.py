@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 def measure_of_variants(TP,FP,TN,FN,k,week,path_save_file):
-    #TP=true positive,FP=false positive, TN= True Negative, FN=false negative, k=variante, week=settimana giusta
+    #TP=true positive,FP=false positive, TN= True Negative, FN=false negative, k=variante, week
     precision=TP/(TP+FP+0.0001)
     recall=TP/(TP+FN+0.0001)
     specificity=TN/(TN+FP+0.0001)
