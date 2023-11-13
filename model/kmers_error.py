@@ -49,21 +49,4 @@ def selection_kmers(AE_prediction, True_sequences, kmers, AE_classes, identifier
         csvwriter.writerows(summary)
 
 
-# # Mock Data
-# AE_prediction = [
-#     [0.1, 0.2, 0.3, 0.4, 0.5],
-#     [0.5, 0.4, 0.3, 0.2, 0.1],
-#     [0.2, 0.3, 0.4, 0.5, 0.6]
-# ]
-# True_sequences = [
-#     [0.1, 0.3, 0.3, 0.4, 0.5],
-#     [0.4, 0.4, 0.3, 0.2, 0.1],
-#     [0.2, 0.3, 0.5, 0.5, 0.7]
-# ]
-# kmers = ["A", "T", "C", "G", "N"]
-# AE_classes =np.array([1, -1, -1])
-# identificativo = ["ID1", "ID2", "ID3"]
-# week = "Week1"
-#
-# # Call the function
-# selection_kmers(AE_prediction, True_sequences, kmers, AE_classes, identificativo)
+
