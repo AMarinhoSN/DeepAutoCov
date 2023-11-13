@@ -1,4 +1,4 @@
-# funxione che mi mappa i lineage
+
 def map_lineage_to_finalclass(class_list, non_neutral):
     """
     This function maps a list of lineages to a final class based on their neutrality.
