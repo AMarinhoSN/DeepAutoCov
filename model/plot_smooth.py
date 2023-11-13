@@ -4,7 +4,7 @@ from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import seaborn as sns
 import pandas as pd
 
-def plot_sma(vector, window_size,path_salvataggio):
+def plot_sma(vector, window_size,path_save):
     """
     Calculates the Simple Moving Average (SMA) of a vector and plots it together with the barplot of the vector itself.
     The window_size parameter indicates the size of the docker.
